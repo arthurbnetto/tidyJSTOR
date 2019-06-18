@@ -26,7 +26,7 @@ Now, with our df in hand is time to analyze it, but first let's clean it. JSTOR 
     
 A typical output would be as the following:
 
-![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/clean.png)
+![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/clean.jpeg)
 
 Now, with a clean dataset, it is possible to plot some graph. Still, as we are goning to analyze words, it is interesting to be abale to customize words we want out from our sample. for this we create an object using the tm package:
 
@@ -44,7 +44,7 @@ The last array is that of all customizable words. Normally, we add strange occur
 
 The output is the following:
 
-![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/topwords.png)
+![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/topwords.jpeg)
 
 The same can be done for bigrams and trigrams using the commands JSTORrepeatedTopBigrams and JSTORrepeatedTopTrigrams.
 
@@ -59,7 +59,7 @@ Simlar graph can be built for journals. Instead of observing the main words over
      
 the main journals over time of our dataset are the following:
 
-![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/journals.png)
+![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/journals.jpeg)
 
 The final graph allows to observe the trend of specific clusters of words in the abstracts. Hence, imagine we are interested in observe how words related to theory evolved inside the papers in labor about data we are looking at. we could create an array of words related to theory such as: c("theory", "theories", "theoretical"). With this array we could plot the evelution of this words inside our dataframe in the following manner:
 
@@ -67,7 +67,7 @@ The final graph allows to observe the trend of specific clusters of words in the
     
 The output would be this:
 
-![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/theory.png)
+![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/theory.jpeg)
 
 Finally, it is interesting to notice that all plots are ggplot objects and can be saved and customized like the following:
 
@@ -76,5 +76,5 @@ Finally, it is interesting to notice that all plots are ggplot objects and can b
 
 Giving more information or more beautiful graphs like the next one:
 
-![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/smooth.png)
+![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/smooth.jpeg)
 
