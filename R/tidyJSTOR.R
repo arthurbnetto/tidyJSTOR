@@ -55,27 +55,11 @@ Transform <- function (filePath)
 JSTOR_df <- function (filePath)
 {
 
-  files <- list.files(filePath, "*.xml")
 
-  #Loop para criar um df com os dados de todos os arquivos
-  i = 2
-  dfEco <- Transform (paste(filePath, files[i], sep="/", collapse=""))
-  while (i<=length(files))
-  {
-    df <- Transform (paste(filePath, files[i], sep="/", collapse=""))
-    dfEco[i,] <- df
-
-    if (i %% 1000 == 0)
-    {
-      cat((100*i)/length(files))
-      cat("%\n")
-      flush.console()
-    }
-
-    i <- i + 1
-  }
-
-  data.frame(dfEco)
+  files <- list.files(filePath, "*.xml", full.names=TRUE)
+	df<-pblapply(files, Transform)
+	df<-ldply(df, data.frame)
+  
 }
 
 #Função que limpa os dados do data frame de abstracts ou titulos
