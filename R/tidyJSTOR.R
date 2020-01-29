@@ -40,11 +40,11 @@ Transform <- function (filePath)
 
 #' @title JSTOR_df
 #'
-#' @description This function transforms all files in a folder with JSTOR's DFR metada into a tidy dataframes
+#' @description This function transforms all files in a folder with JSTOR's DFR metada into a tidy dataframes.
 #'
 #' @param filePath
 #'
-#' @return A dataframe containing informations about: Journal, Publisher, Title, Year, Abstract and Language
+#' @return A dataframe containing informations about: Journal, Publisher, Title, Year, Abstract and Language.
 #'
 #' @examples JSTOR_df("C:/Users/.../Documents/metadata/")
 #'
