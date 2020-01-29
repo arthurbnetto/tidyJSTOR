@@ -55,10 +55,9 @@ Transform <- function (filePath)
 JSTOR_df <- function (filePath)
 {
 
-
   files <- list.files(filePath, "*.xml", full.names=TRUE)
-	df<-pblapply(files, Transform)
-	df<-ldply(df, data.frame)
+  df<-pblapply(files, Transform)
+  df<-ldply(df, data.frame)
   
 }
 
