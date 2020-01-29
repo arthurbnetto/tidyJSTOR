@@ -51,7 +51,7 @@ Transform <- function (filePath)
 #'
 #' @export
 ###########################################
-#Função que cria um df com todos os arquivos
+#Function to create a dataframe from a filepath
 JSTOR_df <- function (filePath)
 {
 
