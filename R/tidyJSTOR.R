@@ -274,8 +274,11 @@ JSTORplotVocabCount <- function (dfEco, ArrayVocab, titles = FALSE, StopWords)
 						 "1", "91"), lexicon = "custom")), StopWords )
 	'%>%'<-purrr::'%>%'
 	#Tokenization = Transformar dados em tidy com tidytext = outro tipo de dado para análise de texto e sentimento
-	AbstractsTidy <- dfEco %>%
- 		tidytext::unnest_tokens (word, ifelse(titles = FALSE, Abstract, Title))
+	AbstractsTidy <- ifelse(titles == FALSE,
+		dfEco %>%
+ 		tidytext::unnest_tokens (word, Abstract),
+		dfEco %>%
+ 		tidytext::unnest_tokens (word, Title))
 
 	AbstractsTidy <- AbstractsTidy%>%
  		dplyr::anti_join(custom_stop_words)
