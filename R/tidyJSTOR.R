@@ -248,37 +248,48 @@ JSTORrepeatedTopBigrams <- function (dfEco, y, x)
 ##############################################
 #Função que plota contagem de palavras por ano daquele determinado dataframe (obs: pode ser uma seleção)
 # exemplo ArrayVocab = c("theory", "theories", "theoretical")
-JSTORplotVocabCount <- function (dfEco, ArrayVocab)
+
+JSTORplotVocabCount <- function (dfEco, ArrayVocab, titles = FALSE, StopWords)
 {
+	
 
-  #Tokenization = Transformar dados em tidy com tidytext = outro tipo de dado para análise de texto e sentimento
-  AbstractsTidy <- dfEco %>%
-    unnest_tokens (word, Abstract)
+	ifelse(missing(StopWords)==TRUE, custom_stop_words = rbind(stop_words,
+                               data_frame(word = tm::stopwords("spanish"), lexicon = "custom"),
+                               data_frame(word = tm::stopwords("german"), lexicon = "custom"),
+                               data_frame(word = tm::stopwords("french"), lexicon = "custom"),
+                               data_frame(word = c("ã", "dãf", "ãf", "d'ãf", "lãf", "paper", "i", "ii", 
+						"iii", "iv", "conclusion", "introduction", "v", "vi", "vii",
+						 "1", "91"), lexicon = "custom"), custom_stop_words = StopWords )
+	'%>%'<-purrr::'%>%'
+	#Tokenization = Transformar dados em tidy com tidytext = outro tipo de dado para análise de texto e sentimento
+	AbstractsTidy <- dfEco %>%
+ 		tidytext::unnest_tokens (word, ifelse(titles = FALSE, Abstract, Title))
 
-  AbstractsTidy <- (AbstractsTidy%>%
-                      anti_join(custom_stop_words))
+	AbstractsTidy <- (AbstractsTidy%>%
+ 		dplyr::anti_join(custom_stop_words))
 
-  Total <- (dfEco %>%
-              group_by (Year)%>%
-              summarise (totalJournalsEco = n ()))
+	Total <- (dfEco %>%
+		dplyr::group_by (Year)%>%
+		dplyr::summarise (totalJournalsEco = n ()))
 
-  scoreVector <- rep(1, length(ArrayVocab))
+	scoreVector <- rep(1, length(ArrayVocab))
 
-  vocab <- data.frame(word = as.character(ArrayVocab),
-                      score = scoreVector)
+	vocab <- data.frame(word = as.character(ArrayVocab),
+		      		score = scoreVector)
 
-  AbstractsVocab <- AbstractsTidy %>%
-    inner_join(vocab) %>%
-    group_by(Year) %>%
-    summarise (VocabScore = sum(score), Count = n())%>%
-    inner_join(Total)%>%
-    mutate(Normalizado = Count/totalJournalsEco)
+	AbstractsVocab <- AbstractsTidy %>%
+  		dplyr::inner_join(vocab) %>%
+  		dplyr::group_by(Year) %>%
+  		dplyr::summarise (VocabScore = sum(score), Count = n())%>%
+  		dplyr::inner_join(Total)%>%
+  		dplyr::mutate(Normalizado = Count/totalJournalsEco)
 
-  graph <-ggplot(AbstractsVocab, aes(Year, Normalizado)) +
-    geom_line(stat = "identity", fill = "navyblue", color = "black") +
-    theme_minimal()
+	graph <-ggplot2::ggplot(AbstractsVocab, 
+		ggplot2::aes(Year, Normalizado)) + 
+		ggplot2::geom_line(stat = "identity", fill = "navyblue", color = "black") +
+		ggplot2::theme_minimal()
 
-  graph
+graph
 }
 
 ##############################################
