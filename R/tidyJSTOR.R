@@ -248,7 +248,19 @@ JSTORrepeatedTopBigrams <- function (dfEco, y, x)
 ##############################################
 #Função que plota contagem de palavras por ano daquele determinado dataframe (obs: pode ser uma seleção)
 # exemplo ArrayVocab = c("theory", "theories", "theoretical")
-
+#' @title JSTORplotVocabCount
+#'
+#' @description This function counts the number of appeares of a set of words in abstracts or titles of a tidyJSTOR dataframe
+#'
+#' @param dfEco, ArrayVocab, titles = FALSE, StopWords
+#'
+#' @return A ggplot2 graph 
+#'
+#' @examples JSTORplotVocabCount(df, c("theory", "theories", "theoretical"), titles=FALSE)
+#'
+#' @import dplyr
+#'
+#' @export
 JSTORplotVocabCount <- function (dfEco, ArrayVocab, titles = FALSE, StopWords)
 {
 	
