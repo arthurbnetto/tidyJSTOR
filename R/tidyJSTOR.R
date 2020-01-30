@@ -253,6 +253,7 @@ JSTORplotVocabCount <- function (dfEco, ArrayVocab, titles = FALSE, StopWords)
 {
 	
 
+	'%>%'<-purrr::'%>%'
 	ifelse(missing(StopWords)==TRUE, custom_stop_words = rbind(stop_words,
                                data_frame(word = tm::stopwords("spanish"), lexicon = "custom"),
                                data_frame(word = tm::stopwords("german"), lexicon = "custom"),
@@ -260,7 +261,7 @@ JSTORplotVocabCount <- function (dfEco, ArrayVocab, titles = FALSE, StopWords)
                                data_frame(word = c("ã", "dãf", "ãf", "d'ãf", "lãf", "paper", "i", "ii", 
 						"iii", "iv", "conclusion", "introduction", "v", "vi", "vii",
 						 "1", "91"), lexicon = "custom"), custom_stop_words = StopWords )
-	'%>%'<-purrr::'%>%'
+	
 	#Tokenization = Transformar dados em tidy com tidytext = outro tipo de dado para análise de texto e sentimento
 	AbstractsTidy <- dfEco %>%
  		tidytext::unnest_tokens (word, ifelse(titles = FALSE, Abstract, Title))
