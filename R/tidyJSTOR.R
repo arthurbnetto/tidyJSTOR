@@ -103,7 +103,7 @@ plotCleaningResult <- function(dfClean, dfDirt)
 {
 
   '%>%'<-purrr::'%>%'
-  TotalLimpo <- (dplyr::dfClean%>%
+  TotalLimpo <- (dfClean%>%
                    dplyr::group_by (Year)%>%
                    dplyr::summarise (n = n ()))
 
