@@ -19,15 +19,15 @@
 #Função que percorre os caminhos de um arquivo xml e retorna um df (1x1) com os dados
 Transform <- function (filePath)
 {
-  a <- xmlParse (filePath)
-  aTop <- xmlRoot (a)
+  a <- XML::xmlParse (filePath)
+  aTop <- XML::xmlRoot (a)
 
-  Journal <- xmlValue(aTop[["front"]][["journal-meta"]][["journal-title-group"]][["journal-title"]])
-  Publisher <- xmlValue (aTop[["front"]][["journal-meta"]][["publisher"]][["publisher-name"]])
-  Title <- xmlValue (aTop[["front"]][["article-meta"]][["title-group"]][["article-title"]])
-  Year <- as.integer(xmlValue(aTop[["front"]][["article-meta"]][["pub-date"]][["year"]]))
-  Abstract <- xmlValue(aTop[["front"]][["article-meta"]][["abstract"]])
-  Language <- xmlValue(aTop[["front"]][["article-meta"]][["custom-meta-group"]][["custom-meta"]][["meta-value"]])
+  Journal <- XML::xmlValue(aTop[["front"]][["journal-meta"]][["journal-title-group"]][["journal-title"]])
+  Publisher <- XML::xmlValue (aTop[["front"]][["journal-meta"]][["publisher"]][["publisher-name"]])
+  Title <- XML::xmlValue (aTop[["front"]][["article-meta"]][["title-group"]][["article-title"]])
+  Year <- as.integer(XML::xmlValue(aTop[["front"]][["article-meta"]][["pub-date"]][["year"]]))
+  Abstract <- XML::xmlValue(aTop[["front"]][["article-meta"]][["abstract"]])
+  Language <- XML::xmlValue(aTop[["front"]][["article-meta"]][["custom-meta-group"]][["custom-meta"]][["meta-value"]])
 
   df <- data.frame (Journal, Publisher, Title, Year, Abstract, Language, stringsAsFactors = FALSE)
 
