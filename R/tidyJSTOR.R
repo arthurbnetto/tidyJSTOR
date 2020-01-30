@@ -111,13 +111,23 @@ plotCleaningResult <- function(dfClean, dfDirt)
                   dplyr::group_by (Year)%>%
                   dplyr::summarise (n = n ()))
 
-  graph <-ggplot2::ggplot(TotalSujo, 
-                          ggplot2::aes(Year, n)) +
-    ggplot2::geom_line(stat = "identity", fill = "navyblue", color = "black") +
-    ggplot2::geom_line(data=TotalLimpo, color = "green") +
-    ggplot2::theme_minimal()
+  comparison<-TotalSujo%>%
+	dplyr::full_join(TotalLimpo, by = "Year")
 
-  graph
+	colnames(comparison)<-c("Year", "Dirt Data", "Clean Data")
+	melted <- reshape2::melt(comparison ,  id.vars = 'Year', variable.name = 'series')
+
+  ggplot2::ggplot (melted, 
+	ggplot2::aes(Year, value, color=series))+
+	ggplot2::geom_line()+
+	ggplot2::theme_bw()+
+	ggplot2::labs(x= "", y= "Citations")+
+  	ggplot2::theme(panel.grid.minor = element_blank(), panel.border = element_rect(linetype = "solid", color = "grey", fill = NA), 
+		legend.position="bottom", legend.direction="horizontal", legend.title = element_blank(),
+		#strip.text.x = element_text(size = 12, colour = "black"),
+		axis.text.y = element_text(size=14),
+		axis.text.x = element_text(angle = 60, hjust = 1, size=14),
+		text=element_text(family="serif")) 
 }
 
 ##############################################
