@@ -111,7 +111,8 @@ plotCleaningResult <- function(dfClean, dfDirt)
                   dplyr::group_by (Year)%>%
                   dplyr::summarise (n = n ()))
 
-  graph <-ggplot2::ggplot(TotalSujo, aes(Year, n)) +
+  graph <-ggplot2::ggplot(TotalSujo, 
+                          ggplot2::aes(Year, n)) +
     ggplot2::geom_line(stat = "identity", fill = "navyblue", color = "black") +
     ggplot2::geom_line(data=TotalLimpo, color = "green") +
     ggplot2::theme_minimal()
