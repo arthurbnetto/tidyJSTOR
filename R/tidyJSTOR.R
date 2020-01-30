@@ -285,7 +285,7 @@ JSTORplotVocabCount <- function (dfEco, ArrayVocab, titles = FALSE, StopWords = 
  		tidytext::unnest_tokens (word, Abstract)
 	}else{
 	AbstractsTidy <- dfEco %>%
- 		tidytext::unnest_tokens (word, Title))
+ 		tidytext::unnest_tokens (word, Title)
 	}
 
 	AbstractsTidy <- AbstractsTidy%>%
