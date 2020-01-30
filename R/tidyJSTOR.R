@@ -122,8 +122,8 @@ plotCleaningResult <- function(dfClean, dfDirt)
 	ggplot2::geom_line()+
 	ggplot2::theme_bw()+
 	ggplot2::labs(x= "", y= "Citations")+
-  	ggplot2::theme(panel.grid.minor = element_blank(), panel.border = element_rect(linetype = "solid", color = "grey", fill = NA), 
-		legend.position="bottom", legend.direction="horizontal", legend.title = element_blank(),
+  	ggplot2::theme(panel.grid.minor = ggplot2::element_blank(), panel.border = ggplot2::element_rect(linetype = "solid", color = "grey", fill = NA), 
+		legend.position="bottom", legend.direction="horizontal", legend.title = ggplot2::element_blank(),
 		#strip.text.x = element_text(size = 12, colour = "black"),
 		axis.text.y = ggplot2::element_text(size=14),
 		axis.text.x = ggplot2::element_text(angle = 60, hjust = 1, size=14),
