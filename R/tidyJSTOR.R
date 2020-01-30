@@ -78,15 +78,15 @@ CleanJSTOR_df <- function (df, Titles=FALSE)
 
   #Retira NAs
   if (Titles == FALSE){
-    df <- df[complete.cases(select(df, Abstract)),]
+    df <- df[complete.cases(dplyr::select(df, Abstract)),]
   }else{
-    df <- df[complete.cases(select(df, Title)),]
+    df <- df[complete.cases(dplyr::select(df, Title)),]
   }
 
   #Seleção de abstracts estritamente em inglês
   df <- (df%>%
            dplyr::filter(Language == "eng" | Language == "en")%>%
-           dplyr::select_(Title, Year, Abstract, Language, Journal, Publisher))
+           dplyr::select(Title, Year, Abstract, Language, Journal, Publisher))
 
   df <- df%>%
     dplyr::filter(!stringr::str_detect(Abstract, " et "))%>%
