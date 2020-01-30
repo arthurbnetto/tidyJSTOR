@@ -261,7 +261,7 @@ JSTORrepeatedTopBigrams <- function (dfEco, y, x)
 #' @import dplyr
 #'
 #' @export
-JSTORplotVocabCount <- function (dfEco, ArrayVocab, titles = FALSE, StopWords = TRUE)
+JSTORplotVocabCount <- function (dfEco, ArrayVocab, titles = FALSE, StopWords = TRUE, output = "dataframe")
 {
 	
 
@@ -312,7 +312,12 @@ JSTORplotVocabCount <- function (dfEco, ArrayVocab, titles = FALSE, StopWords = 
 		ggplot2::geom_line(stat = "identity", fill = "navyblue", color = "black") +
 		ggplot2::theme_minimal()
 
-graph
+if (output == "graphical")
+{
+	graph
+}else{
+	AbstractsVocab
+}
 }
 
 ##############################################
