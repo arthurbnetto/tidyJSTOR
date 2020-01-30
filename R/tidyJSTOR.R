@@ -253,25 +253,24 @@ JSTORplotVocabCount <- function (dfEco, ArrayVocab, titles = FALSE, StopWords)
 {
 	
 
-	'%>%'<-purrr::'%>%'
-	ifelse(missing(StopWords)==TRUE, custom_stop_words = rbind(stop_words,
-                               data_frame(word = tm::stopwords("spanish"), lexicon = "custom"),
-                               data_frame(word = tm::stopwords("german"), lexicon = "custom"),
-                               data_frame(word = tm::stopwords("french"), lexicon = "custom"),
-                               data_frame(word = c("ã", "dãf", "ãf", "d'ãf", "lãf", "paper", "i", "ii", 
+	custom_stop_words<- ifelse(missing(StopWords)==TRUE, rbind(data.frame(word = tm::stopwords("english"), lexicon = "custom"),
+                               data.frame(word = tm::stopwords("spanish"), lexicon = "custom"),
+                               data.frame(word = tm::stopwords("german"), lexicon = "custom"),
+                               data.frame(word = tm::stopwords("french"), lexicon = "custom"),
+                               data.frame(word = c("ã", "dãf", "ãf", "d'ãf", "lãf", "paper", "i", "ii", 
 						"iii", "iv", "conclusion", "introduction", "v", "vi", "vii",
-						 "1", "91"), lexicon = "custom"), custom_stop_words = StopWords )
-	
+						 "1", "91"), lexicon = "custom")), StopWords )
+	'%>%'<-purrr::'%>%'
 	#Tokenization = Transformar dados em tidy com tidytext = outro tipo de dado para análise de texto e sentimento
 	AbstractsTidy <- dfEco %>%
  		tidytext::unnest_tokens (word, ifelse(titles = FALSE, Abstract, Title))
 
-	AbstractsTidy <- (AbstractsTidy%>%
- 		dplyr::anti_join(custom_stop_words))
+	AbstractsTidy <- AbstractsTidy%>%
+ 		dplyr::anti_join(custom_stop_words)
 
-	Total <- (dfEco %>%
+	Total <- dfEco %>%
 		dplyr::group_by (Year)%>%
-		dplyr::summarise (totalJournalsEco = n ()))
+		dplyr::summarise (totalJournalsEco = n ())
 
 	scoreVector <- rep(1, length(ArrayVocab))
 
