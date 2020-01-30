@@ -86,7 +86,7 @@ CleanJSTOR_df <- function (df, Titles=FALSE)
   #Seleção de abstracts estritamente em inglês
   df <- (df%>%
            dplyr::filter(Language == "eng" | Language == "en")%>%
-           dplyr::select(Title, Year, Abstract, Language, Journal, Publisher))
+           dplyr::select_(Title, Year, Abstract, Language, Journal, Publisher))
 
   df <- df%>%
     dplyr::filter(!stringr::str_detect(Abstract, " et "))%>%
