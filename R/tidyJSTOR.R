@@ -65,15 +65,16 @@ JSTOR_df <- function (filePath)
 CleanJSTOR_df <- function (df, Titles=FALSE)
 {
 
+  '%>%'<-purrr::'%>%'
   #Exclui Artigos com nomes repetidos: "front matter", "back matter"...
   dfJournals <- (df%>%
-                   group_by (Title)%>%
-                   summarise (n = n ())%>%
-                   filter(n < 2) %>%
-                   arrange(desc(n)))
+                   dplyr::group_by (Title)%>%
+                   dplyr::summarise (n = n ())%>%
+                   dplyr::filter(n < 2) %>%
+                   dplyr::arrange(desc(n)))
 
   df <- df%>%
-    inner_join (dfJournals)
+    dplyr::inner_join (dfJournals)
 
   #Retira NAs
   if (Titles == FALSE){
@@ -84,14 +85,14 @@ CleanJSTOR_df <- function (df, Titles=FALSE)
 
   #Seleção de abstracts estritamente em inglês
   df <- (df%>%
-           filter(Language == "eng" | Language == "en")%>%
-           select(Title, Year, Abstract, Language, Journal, Publisher))
+           dplyr::filter(Language == "eng" | Language == "en")%>%
+           dplyr::select(Title, Year, Abstract, Language, Journal, Publisher))
 
   df <- df%>%
-    filter(!str_detect(Abstract, " et "))%>%
-    filter(!str_detect(Abstract, " und "))%>%
-    filter(!str_detect(Abstract, " la "))%>%
-    filter(Year < 2011)
+    dplyr::filter(!stringr::str_detect(Abstract, " et "))%>%
+    dplyr::filter(!stringr::str_detect(Abstract, " und "))%>%
+    dplyr::filter(!stringr::str_detect(Abstract, " la "))%>%
+    dplyr::filter(Year < 2011)
 
   df
 }
