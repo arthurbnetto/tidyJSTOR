@@ -261,7 +261,7 @@ JSTORrepeatedTopBigrams <- function (dfEco, y, x)
 #' @import dplyr
 #'
 #' @export
-JSTORplotVocabCount <- function (dfEco, ArrayVocab, titles = FALSE, StopWords = TRUE, output = "dataframe")
+JSTORplotVocabCount <- function (dfEco, ArrayVocab, titles = FALSE, StopWords = TRUE, output = "dataframe", scores)
 {
 	
 
@@ -293,9 +293,13 @@ JSTORplotVocabCount <- function (dfEco, ArrayVocab, titles = FALSE, StopWords = 
 
 	Total <- dfEco %>%
 		dplyr::group_by (Year)%>%
-		dplyr::summarise (totalJournalsEco = n ())
-
-	scoreVector <- rep(1, length(ArrayVocab))
+		dplyr::summarise (YearlyPapers = n ())
+	if (missing(scores))
+	{
+		scoreVector <- rep(1, length(ArrayVocab))
+	}else{
+	    	scoreVector <- scores
+	}
 
 	vocab <- data.frame(word = as.character(ArrayVocab),
 		      		score = scoreVector)
@@ -305,10 +309,10 @@ JSTORplotVocabCount <- function (dfEco, ArrayVocab, titles = FALSE, StopWords = 
   		dplyr::group_by(Year) %>%
   		dplyr::summarise (VocabScore = sum(score), Count = n())%>%
   		dplyr::inner_join(Total)%>%
-  		dplyr::mutate(Normalizado = Count/totalJournalsEco)
+  		dplyr::mutate(Normalized = Count/YearlyPapers)
 
 	graph <-ggplot2::ggplot(AbstractsVocab, 
-		ggplot2::aes(Year, Normalizado)) + 
+		ggplot2::aes(Year, Normalized)) + 
 		ggplot2::geom_line(stat = "identity", fill = "navyblue", color = "black") +
 		ggplot2::theme_minimal()
 
