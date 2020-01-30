@@ -261,17 +261,17 @@ JSTORrepeatedTopBigrams <- function (dfEco, y, x)
 #' @import dplyr
 #'
 #' @export
-JSTORplotVocabCount <- function (dfEco, ArrayVocab, titles = FALSE, StopWords)
+JSTORplotVocabCount <- function (dfEco, ArrayVocab, titles = FALSE, StopWords = TRUE)
 {
 	
 
-	custom_stop_words<- ifelse(missing(StopWords)==TRUE, rbind(data.frame(word = tm::stopwords("english"), lexicon = "custom"),
+	custom_stop_words<- ifelse(StopWords==TRUE, rbind(data.frame(word = tm::stopwords("english"), lexicon = "custom"),
                                data.frame(word = tm::stopwords("spanish"), lexicon = "custom"),
                                data.frame(word = tm::stopwords("german"), lexicon = "custom"),
                                data.frame(word = tm::stopwords("french"), lexicon = "custom"),
                                data.frame(word = c("ã", "dãf", "ãf", "d'ãf", "lãf", "paper", "i", "ii", 
 						"iii", "iv", "conclusion", "introduction", "v", "vi", "vii",
-						 "1", "91"), lexicon = "custom")), StopWords )
+						 "1", "91"), lexicon = "custom")), StopWords)
 	'%>%'<-purrr::'%>%'
 	#Tokenization = Transformar dados em tidy com tidytext = outro tipo de dado para análise de texto e sentimento
 	AbstractsTidy <- ifelse(titles == FALSE,
