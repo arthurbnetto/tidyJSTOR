@@ -121,7 +121,7 @@ plotCleaningResult <- function(dfClean, dfDirt)
 	ggplot2::aes(Year, value, color=series))+
 	ggplot2::geom_line()+
 	ggplot2::theme_bw()+
-	ggplot2::labs(x= "", y= "Citations")+
+	ggplot2::labs(x= "", y= "Papers")+
   	ggplot2::theme(panel.grid.minor = ggplot2::element_blank(), panel.border = ggplot2::element_rect(linetype = "solid", color = "grey", fill = NA), 
 		legend.position="bottom", legend.direction="horizontal", legend.title = ggplot2::element_blank(),
 		#strip.text.x = element_text(size = 12, colour = "black"),
