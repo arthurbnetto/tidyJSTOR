@@ -102,18 +102,19 @@ CleanJSTOR_df <- function (df, Titles=FALSE)
 plotCleaningResult <- function(dfClean, dfDirt)
 {
 
-  TotalLimpo <- (dfClean%>%
-                   group_by (Year)%>%
-                   summarise (n = n ()))
+  '%>%'<-purrr::'%>%'
+  TotalLimpo <- (dplyr::dfClean%>%
+                   dplyr::group_by (Year)%>%
+                   dplyr::summarise (n = n ()))
 
   TotalSujo <- (dfDirt%>%
-                  group_by (Year)%>%
-                  summarise (n = n ()))
+                  dplyr::group_by (Year)%>%
+                  dplyr::summarise (n = n ()))
 
-  graph <-ggplot(TotalSujo, aes(Year, n)) +
-    geom_line(stat = "identity", fill = "navyblue", color = "black") +
-    geom_line(data=TotalLimpo, color = "green") +
-    theme_minimal()
+  graph <-ggplot2::ggplot(TotalSujo, aes(Year, n)) +
+    ggplot2::geom_line(stat = "identity", fill = "navyblue", color = "black") +
+    ggplot2::geom_line(data=TotalLimpo, color = "green") +
+    ggplot2::theme_minimal()
 
   graph
 }
