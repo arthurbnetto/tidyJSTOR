@@ -179,7 +179,7 @@ JSTORrepeatedTopwords <- function (dfEco, y, x, StopWords = TRUE)
   #Vizualização
   graph<- ggplot2::ggplot(AbstractsTidyYear, 
 		ggplot2::aes(Year, reorder(word, Year), size = n)) +
-    		ggplot2:geom_point(alpha=0.5)+
+    		ggplot2::geom_point(alpha=0.5)+
 	ggplot2::theme_bw()+
 	ggplot2::labs(x= "", y= "")+
   	ggplot2::theme(panel.grid.minor = ggplot2::element_blank(), panel.border = ggplot2::element_rect(linetype = "solid", color = "grey", fill = NA), 
