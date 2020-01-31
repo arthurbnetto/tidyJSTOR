@@ -142,7 +142,7 @@ JSTORrepeatedTopwords <- function (dfEco, y, x, StopWords = TRUE)
                                data.frame(word = tm::stopwords("french"), lexicon = "custom"),
                                data.frame(word = c("ã", "dãf", "ãf", "d'ãf", "lãf", "paper", "i", "ii", 
 						"iii", "iv", "conclusion", "introduction", "v", "vi", "vii",
-						 "1", "91"), lexicon = "custom"))
+						 "1", "91", NA), lexicon = "custom"))
 	}else{
 	custom_stop_words<- StopWords
 	}
@@ -205,7 +205,7 @@ JSTORrepeatedTopTrigrams <- function (dfEco, y, x, StopWords=TRUE)
                                data.frame(word = tm::stopwords("french"), lexicon = "custom"),
                                data.frame(word = c("ã", "dãf", "ãf", "d'ãf", "lãf", "paper", "i", "ii", 
 						"iii", "iv", "conclusion", "introduction", "v", "vi", "vii",
-						 "1", "91"), lexicon = "custom"))
+						 "1", "91", NA), lexicon = "custom"))
 	}else{
 	custom_stop_words<- StopWords
 	}
@@ -270,7 +270,7 @@ JSTORrepeatedTopBigrams <- function (dfEco, y, x, StopWords = TRUE)
                                data.frame(word = tm::stopwords("french"), lexicon = "custom"),
                                data.frame(word = c("ã", "dãf", "ãf", "d'ãf", "lãf", "paper", "i", "ii", 
 						"iii", "iv", "conclusion", "introduction", "v", "vi", "vii",
-						 "1", "91"), lexicon = "custom"))
+						 "1", "91", NA), lexicon = "custom"))
 	}else{
 	custom_stop_words<- StopWords
 	}
@@ -353,7 +353,7 @@ JSTORplotVocabCount <- function (dfEco, ArrayVocab, titles = FALSE, StopWords = 
                                data.frame(word = tm::stopwords("french"), lexicon = "custom"),
                                data.frame(word = c("ã", "dãf", "ãf", "d'ãf", "lãf", "paper", "i", "ii", 
 						"iii", "iv", "conclusion", "introduction", "v", "vi", "vii",
-						 "1", "91"), lexicon = "custom"))
+						 "1", "91", NA), lexicon = "custom"))
 	}else{
 	custom_stop_words<- StopWords
 	}
