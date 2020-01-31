@@ -161,11 +161,11 @@ JSTORrepeatedTopwords <- function (dfEco, y, x, StopWords = TRUE)
 
   #Filtrar palavras que aparecem pelo menos x vezes(anos) no top
 
-  k <- !sum(stringr::str_detect(AbstractsTidyYear$word, AbstractsTidyYear$word[1]))<x
+  k <- !sum(as.numeric(stringr::str_detect(AbstractsTidyYear$word, AbstractsTidyYear$word[1])), na.rm=TRUE)<x
   i=2
   while(i<=nrow(AbstractsTidyYear))
   {
-    a <- !sum(stringr::str_detect(AbstractsTidyYear$word, AbstractsTidyYear$word[i]))<x
+    a <- !sum(as.numeric(stringr::str_detect(AbstractsTidyYear$word, AbstractsTidyYear$word[i])), na.rm=TRUE)<x
     k <- rbind(k, a)
     i = i+1
   }
@@ -179,7 +179,7 @@ JSTORrepeatedTopwords <- function (dfEco, y, x, StopWords = TRUE)
   #Vizualização
   graph<- ggplot2::ggplot(AbstractsTidyYear, 
 		ggplot2::aes(Year, reorder(word, Year), size = n)) +
-    		ggplot2::geom_point(alpha=0.5)+
+    		ggplot2::geom_point()+
 	ggplot2::theme_bw()+
 	ggplot2::labs(x= "", y= "")+
   	ggplot2::theme(panel.grid.minor = ggplot2::element_blank(), panel.border = ggplot2::element_rect(linetype = "solid", color = "grey", fill = NA), 
