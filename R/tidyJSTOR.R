@@ -408,15 +408,26 @@ if (output == "graphical")
 #Função que plota os x journals que mais publicaram para cada ano
 JSTORplotJournals <- function (df, x)
 {
-  MençõesJournal <- df%>%
-    count(Year, Journal, sort = TRUE)%>%
-    group_by(Year)%>%
-    top_n(x)%>%
-    arrange(desc(Year))%>%
-    ungroup()
+	'%>%'<-purrr::'%>%'
+ 
+	MençõesJournal <- df%>%
+		dplyr::count(Year, Journal, sort = TRUE)%>%
+		dplyr::group_by(Year)%>%
+		dplyr::top_n(x)%>%
+		dplyr::arrange(dplyr::desc(Year))%>%
+		dplyr::ungroup()
 
-  graph<-ggplot(MençõesJournal, aes(Year, Journal, size = n)) +
-    geom_point()
+	graph<-ggplot2::ggplot(MençõesJournal, 
+		ggplot2::aes(Year, Journal, size = n)) +
+		ggplot2::geom_point()+
+		ggplot2::theme_bw()+
+		ggplot2::labs(x= "", y= "")+
+  		ggplot2::theme(panel.grid.minor = ggplot2::element_blank(), panel.border = ggplot2::element_rect(linetype = "solid", color = "grey", fill = NA), 
+			legend.position="bottom", legend.direction="horizontal", legend.title = ggplot2::element_blank(),
+			#strip.text.x = element_text(size = 12, colour = "black"),
+			axis.text.y = ggplot2::element_text(size=14),
+			axis.text.x = ggplot2::element_text(angle = 60, hjust = 1, size=14),
+			text=ggplot2::element_text(family="serif")) 
 
-  graph
+  	graph
 }
