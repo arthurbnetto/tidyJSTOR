@@ -135,24 +135,25 @@ plotCleaningResult <- function(dfClean, dfDirt)
 JSTORrepeatedTopwords <- function (dfEco, y, x)
 {
 
+  '%>%'<-purrr::'%>%'
   #Principais palavras ao longo do tempo
   AbstractsTidyYear <- dfEco %>%
-    unnest_tokens (word, Abstract)%>%
-    anti_join(custom_stop_words)%>%
-    count(Year, word, sort = TRUE)%>%
-    group_by(Year)%>%
-    mutate(n = n/n())%>%
-    top_n(y)%>%
-    arrange(desc(Year))%>%
-    ungroup()
+    tidytext::unnest_tokens (word, Abstract)%>%
+    dplyr::anti_join(custom_stop_words)%>%
+    dplyr::count(Year, word, sort = TRUE)%>%
+    dplyr::group_by(Year)%>%
+    dplyr::mutate(n = n/n())%>%
+    dplyr::top_n(y)%>%
+    dplyr::arrange(desc(Year))%>%
+    dplyr::ungroup()
 
   #Filtrar palavras que aparecem pelo menos x vezes(anos) no top
 
-  k <- !sum(str_detect(AbstractsTidyYear$word, AbstractsTidyYear$word[1]))<x
+  k <- !sum(stringr::str_detect(AbstractsTidyYear$word, AbstractsTidyYear$word[1]))<x
   i=2
   while(i<=nrow(AbstractsTidyYear))
   {
-    a <- !sum(str_detect(AbstractsTidyYear$word, AbstractsTidyYear$word[i]))<x
+    a <- !sum(stringr::str_detect(AbstractsTidyYear$word, AbstractsTidyYear$word[i]))<x
     k <- rbind(k, a)
     i = i+1
   }
@@ -161,11 +162,20 @@ JSTORrepeatedTopwords <- function (dfEco, y, x)
   AbstractsTidyYear <- cbind(AbstractsTidyYear, logi = k[,1])
 
   AbstractsTidyYear <- AbstractsTidyYear %>%
-    filter(logi>0)
+    dplyr::filter(logi>0)
 
   #Vizualização
-  graph<-ggplot(AbstractsTidyYear, aes(Year, reorder(word, Year), size = n)) +
-    geom_point(alpha=0.5)
+  graph<- ggplot2::ggplot(AbstractsTidyYear, 
+		ggplot2::aes(Year, reorder(word, Year), size = n)) +
+    		ggplot2:geom_point(alpha=0.5)+
+	ggplot2::theme_bw()+
+	ggplot2::labs(x= "", y= "")+
+  	ggplot2::theme(panel.grid.minor = ggplot2::element_blank(), panel.border = ggplot2::element_rect(linetype = "solid", color = "grey", fill = NA), 
+		legend.position="bottom", legend.direction="horizontal", legend.title = ggplot2::element_blank(),
+		#strip.text.x = element_text(size = 12, colour = "black"),
+		axis.text.y = ggplot2::element_text(size=14),
+		axis.text.x = ggplot2::element_text(angle = 60, hjust = 1, size=14),
+		text=ggplot2::element_text(family="serif")) 
 
   graph
 }
