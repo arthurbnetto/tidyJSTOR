@@ -132,9 +132,21 @@ plotCleaningResult <- function(dfClean, dfDirt)
 
 ##############################################
 #Função que plota palavras que aparecem pelo menos x anos no top y
-JSTORrepeatedTopwords <- function (dfEco, y, x)
+JSTORrepeatedTopwords <- function (dfEco, y, x, StopWords = TRUE)
 {
-
+	if (StopWords == TRUE)
+	{
+	custom_stop_words<- rbind(data.frame(word = tm::stopwords("english"), lexicon = "custom"),
+                               data.frame(word = tm::stopwords("spanish"), lexicon = "custom"),
+                               data.frame(word = tm::stopwords("german"), lexicon = "custom"),
+                               data.frame(word = tm::stopwords("french"), lexicon = "custom"),
+                               data.frame(word = c("ã", "dãf", "ãf", "d'ãf", "lãf", "paper", "i", "ii", 
+						"iii", "iv", "conclusion", "introduction", "v", "vi", "vii",
+						 "1", "91"), lexicon = "custom"))
+	}else{
+	custom_stop_words<- StopWords
+	}
+	
   '%>%'<-purrr::'%>%'
   #Principais palavras ao longo do tempo
   AbstractsTidyYear <- dfEco %>%
