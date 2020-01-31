@@ -154,9 +154,9 @@ JSTORrepeatedTopwords <- function (dfEco, y, x, StopWords = TRUE)
     dplyr::anti_join(custom_stop_words)%>%
     dplyr::count(Year, word, sort = TRUE)%>%
     dplyr::group_by(Year)%>%
-    dplyr::mutate(n = n/n())%>%
+    dplyr::mutate(n = n/dplyr::n())%>%
     dplyr::top_n(y)%>%
-    dplyr::arrange(desc(Year))%>%
+    dplyr::arrange(dplyr::desc(Year))%>%
     dplyr::ungroup()
 
   #Filtrar palavras que aparecem pelo menos x vezes(anos) no top
