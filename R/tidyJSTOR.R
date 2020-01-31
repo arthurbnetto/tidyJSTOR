@@ -194,73 +194,111 @@ JSTORrepeatedTopwords <- function (dfEco, y, x, StopWords = TRUE)
 
 ##############################################
 #Função que plota palavras que aparecem pelo menos x anos no top y
-JSTORrepeatedTopTrigrams <- function (dfEco, y, x)
+JSTORrepeatedTopTrigrams <- function (dfEco, y, x, StopWords=TRUE)
 {
 
-  AbstractsTidyTriYear <- dfEco %>%
-    unnest_tokens(trigram, Abstract, token = "ngrams", n = 3) %>%
-    separate(trigram, c("word1", "word2", "word3"), sep = " ") %>%
-    filter(!word1 %in% custom_stop_words$word,
+	if (StopWords == TRUE)
+	{
+	custom_stop_words<- rbind(data.frame(word = tm::stopwords("english"), lexicon = "custom"),
+                               data.frame(word = tm::stopwords("spanish"), lexicon = "custom"),
+                               data.frame(word = tm::stopwords("german"), lexicon = "custom"),
+                               data.frame(word = tm::stopwords("french"), lexicon = "custom"),
+                               data.frame(word = c("ã", "dãf", "ãf", "d'ãf", "lãf", "paper", "i", "ii", 
+						"iii", "iv", "conclusion", "introduction", "v", "vi", "vii",
+						 "1", "91"), lexicon = "custom"))
+	}else{
+	custom_stop_words<- StopWords
+	}
+
+	'%>%'<-purrr::'%>%'
+
+	AbstractsTidyTriYear <- dfEco %>%
+	tidytext::unnest_tokens(trigram, Abstract, token = "ngrams", n = 3) %>%
+	tidyr::separate(trigram, c("word1", "word2", "word3"), sep = " ") %>%
+	dplyr::filter(!word1 %in% custom_stop_words$word,
            !word2 %in% custom_stop_words$word,
            !word3 %in% custom_stop_words$word) %>%
-    count(Year, word1, word2, word3, sort = TRUE)%>%
-    unite(trigram, word1, word2, word3, sep = " ")%>%
-    group_by(Year)%>%
-    mutate(n = n/n())%>%
-    top_n(y)%>%
-    arrange(desc(Year))%>%
-    ungroup()
+	dplyr::count(Year, word1, word2, word3, sort = TRUE)%>%
+	tidyr::unite(trigram, word1, word2, word3, sep = " ")%>%
+	dplyr::group_by(Year)%>%
+	dplyr::mutate(n = n/dplyr::n())%>%
+	dplyr::top_n(y)%>%
+	dplyr::arrange(dplyr::desc(Year))%>%
+	dplyr::ungroup()
 
-  #Filtrar trigrams que aparecem pelo menos x vezes(anos) no top
+	k <- !sum(as.numeric(stringr::str_detect(AbstractsTidyTriYear$trigram, AbstractsTidyTriYear$trigram[1])), na.rm=TRUE)<x
+	i=2
+	while(i<=nrow(AbstractsTidyTriYear))
+	{
+		a <- !sum(as.numeric(stringr::str_detect(AbstractsTidyTriYear$trigram, AbstractsTidyTriYear$trigram[i])), na.rm=TRUE)<x
+		k <- rbind(k, a)
+		i = i+1
+	}
+	k <- data.frame(k)
+	
+	AbstractsTidyTriYear <- cbind(AbstractsTidyTriYear, logi = k[,1])
 
-  k <- !sum(str_detect(AbstractsTidyTriYear$trigram, AbstractsTidyTriYear$trigram[1]))<x
-  i=2
-  while(i<=nrow(AbstractsTidyTriYear))
-  {
-    a <- !sum(str_detect(AbstractsTidyTriYear$trigram, AbstractsTidyTriYear$trigram[i]))<x
-    k <- rbind(k, a)
-    i = i+1
-  }
+	AbstractsTidyTriYear <- AbstractsTidyTriYear %>%
+		dplyr::filter(logi>0)
 
-  k <- data.frame(k)
-  AbstractsTidyTriYear <- cbind(AbstractsTidyTriYear, logi = k[,1])
-
-  AbstractsTidyTriYear <- AbstractsTidyTriYear %>%
-    filter(logi>0)
-
-  graph<-ggplot(AbstractsTidyTriYear, aes(Year, reorder(trigram, Year), size = n)) +
-    geom_point(alpha=0.5)
+	graph<- ggplot2::ggplot(AbstractsTidyTriYear, 
+		ggplot2::aes(Year, reorder(trigram, Year), size = n)) +
+    		ggplot2::geom_point()+
+	ggplot2::theme_bw()+
+	ggplot2::labs(x= "", y= "")+
+  	ggplot2::theme(panel.grid.minor = ggplot2::element_blank(), panel.border = ggplot2::element_rect(linetype = "solid", color = "grey", fill = NA), 
+		legend.position="bottom", legend.direction="horizontal", legend.title = ggplot2::element_blank(),
+		#strip.text.x = element_text(size = 12, colour = "black"),
+		axis.text.y = ggplot2::element_text(size=14),
+		axis.text.x = ggplot2::element_text(angle = 60, hjust = 1, size=14),
+		text=ggplot2::element_text(family="serif")) 
 
   graph
-
 }
 
-#################################################################
-#Função que plota palavras que aparecem pelo menos x anos no top y
-JSTORrepeatedTopBigrams <- function (dfEco, y, x)
+
+
+
+JSTORrepeatedTopBigrams <- function (dfEco, y, x, StopWords = TRUE)
 {
+
+	if (StopWords == TRUE)
+	{
+	custom_stop_words<- rbind(data.frame(word = tm::stopwords("english"), lexicon = "custom"),
+                               data.frame(word = tm::stopwords("spanish"), lexicon = "custom"),
+                               data.frame(word = tm::stopwords("german"), lexicon = "custom"),
+                               data.frame(word = tm::stopwords("french"), lexicon = "custom"),
+                               data.frame(word = c("ã", "dãf", "ãf", "d'ãf", "lãf", "paper", "i", "ii", 
+						"iii", "iv", "conclusion", "introduction", "v", "vi", "vii",
+						 "1", "91"), lexicon = "custom"))
+	}else{
+	custom_stop_words<- StopWords
+	}
+
+	'%>%'<-purrr::'%>%'
+
 
   #Bigram
   AbstractsTidyBiYear <- dfEco %>%
-    unnest_tokens(bigram, Abstract, token = "ngrams", n = 2) %>%
-    separate(bigram, c("word1", "word2"), sep = " ") %>%
-    filter(!word1 %in% custom_stop_words$word,
+    tidytext::unnest_tokens(bigram, Abstract, token = "ngrams", n = 2) %>%
+    tidyr::separate(bigram, c("word1", "word2"), sep = " ") %>%
+    dplyr::filter(!word1 %in% custom_stop_words$word,
            !word2 %in% custom_stop_words$word) %>%
-    count(Year, word1, word2, sort = TRUE)%>%
-    unite(bigram, word1, word2, sep = " ")%>%
-    group_by(Year)%>%
-    mutate(n = n/n())%>%
-    top_n(y)%>%
-    arrange(desc(Year))%>%
-    ungroup()
+    dplyr::count(Year, word1, word2, sort = TRUE)%>%
+    tidyr::unite(bigram, word1, word2, sep = " ")%>%
+    dplyr::group_by(Year)%>%
+    dplyr::mutate(n = n/dplyr::n())%>%
+    dplyr::top_n(y)%>%
+    dplyr::arrange(dplyr::desc(Year))%>%
+    dplyr::ungroup()
 
   #Filtrar trigrams que aparecem pelo menos x(tal que x =3) vezes(anos) no top
 
-  k <- !sum(str_detect(AbstractsTidyBiYear$bigram, AbstractsTidyBiYear$bigram[1]))<x
+  k <- !sum(as.numeric(stringr::str_detect(AbstractsTidyBiYear$bigram, AbstractsTidyBiYear$bigram[1])), na.rm=TRUE)<x
   i=2
   while(i<=nrow(AbstractsTidyBiYear))
   {
-    a <- !sum(str_detect(AbstractsTidyBiYear$bigram, AbstractsTidyBiYear$bigram[i]))<x
+    a <- !sum(as.numeric(stringr::str_detect(AbstractsTidyBiYear$bigram, AbstractsTidyBiYear$bigram[i])), na.rm=TRUE)<x
     k <- rbind(k, a)
     i = i+1
   }
@@ -269,13 +307,23 @@ JSTORrepeatedTopBigrams <- function (dfEco, y, x)
   AbstractsTidyBiYear <- cbind(AbstractsTidyBiYear, logi = k[,1])
 
   AbstractsTidyBiYear <- AbstractsTidyBiYear %>%
-    filter(logi>0)
+    dplyr::filter(logi>0)
 
-  graph<-ggplot(AbstractsTidyBiYear, aes(Year, reorder(bigram, Year), size = n)) +
-    geom_point(alpha=0.5)
+  graph<- ggplot2::ggplot(AbstractsTidyBiYear, 
+		ggplot2::aes(Year, reorder(bigram, Year), size = n)) +
+    		ggplot2::geom_point()+
+	ggplot2::theme_bw()+
+	ggplot2::labs(x= "", y= "")+
+  	ggplot2::theme(panel.grid.minor = ggplot2::element_blank(), panel.border = ggplot2::element_rect(linetype = "solid", color = "grey", fill = NA), 
+		legend.position="bottom", legend.direction="horizontal", legend.title = ggplot2::element_blank(),
+		#strip.text.x = element_text(size = 12, colour = "black"),
+		axis.text.y = ggplot2::element_text(size=14),
+		axis.text.x = ggplot2::element_text(angle = 60, hjust = 1, size=14),
+		text=ggplot2::element_text(family="serif")) 
 
   graph
 }
+
 
 ##############################################
 #Função que plota contagem de palavras por ano daquele determinado dataframe (obs: pode ser uma seleção)
