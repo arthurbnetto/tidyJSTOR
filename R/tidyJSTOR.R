@@ -431,3 +431,52 @@ JSTORplotJournals <- function (df, x)
 
   	graph
 }
+
+CitationCount<-function(df)
+{
+'%>%'<-purrr::'%>%'
+ 	df%>%
+	dplyr::group_by(Year)%>%
+	dplyr::summarise(count = n())
+}
+
+plot_citationCount<- function (df.list, legend, smooth=FALSE)
+{
+ '%>%'<-purrr::'%>%' 
+  count<-lapply(df.list, CitationCount)
+  comparison <- count[[1]]
+  i =2
+  while (i <= length (df.list))
+  {
+	comparison<-comparison%>%
+		dplyr::full_join(count[[i]], by = "Year")
+	i <- i+1
+  }
+
+  if (missing(legend) == TRUE) 
+  {
+  	comparison<-comparison
+  }else{
+	colnames(comparison)<-c("Year", legend)
+  }
+	
+  melted <- reshape2::melt(comparison ,  id.vars = 'Year', variable.name = 'series')
+ 
+
+  p<-ggplot2::ggplot(melted, 
+	ggplot2::aes(Year, value, color=series))
+  if (smooth = FALSE)
+  {
+	p<- p + ggplot2::geom_line()
+  }else{
+	p<- p+ ggplot2::geom_smooth(se=FALSE)
+  }
+	p+ ggplot2::theme_bw()+
+	ggplot2::labs(x= "", y= "Citations")+
+  	ggplot2::theme(panel.grid.minor = ggplot2::element_blank(), panel.border = ggplot2::element_rect(linetype = "solid", color = "grey", fill = NA), 
+		legend.position="bottom", legend.direction="horizontal", legend.title = ggplot2::element_blank(),
+		#strip.text.x = element_text(size = 12, colour = "black"),
+		axis.text.y = ggplot2::element_text(size=14),
+		axis.text.x = ggplot2::element_text(angle = 60, hjust = 1, size=14),
+		text=ggplot2::element_text(family="serif")) 
+}
