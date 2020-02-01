@@ -394,7 +394,14 @@ JSTORplotVocabCount <- function (dfEco, ArrayVocab, titles = FALSE, StopWords = 
 	graph <-ggplot2::ggplot(AbstractsVocab, 
 		ggplot2::aes(Year, Normalized)) + 
 		ggplot2::geom_line(stat = "identity", fill = "navyblue", color = "black") +
-		ggplot2::theme_minimal()
+		ggplot2::theme_bw()+
+		ggplot2::labs(x= "", y= "Word Count/Yearly Papers")+
+  		ggplot2::theme(panel.grid.minor = ggplot2::element_blank(), panel.border = ggplot2::element_rect(linetype = "solid", color = "grey", fill = NA), 
+			legend.position="bottom", legend.direction="horizontal", legend.title = ggplot2::element_blank(),
+			#strip.text.x = element_text(size = 12, colour = "black"),
+			axis.text.y = ggplot2::element_text(size=14),
+			axis.text.x = ggplot2::element_text(angle = 60, hjust = 1, size=14),
+			text=ggplot2::element_text(family="serif")) 
 
 if (output == "graphical")
 {
