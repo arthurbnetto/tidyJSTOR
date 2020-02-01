@@ -391,10 +391,10 @@ JSTORplotVocabCount <- function (dfEco, ArrayVocab, titles = FALSE, StopWords = 
   		dplyr::inner_join(Total)
 	if (missing(scores))
 	{
-	AbstractsVocab <- AbstractsTidy %>%
+	AbstractsVocab <- AbstractsVocab %>%
   		dplyr::mutate(Normalized = Count/YearlyPapers)
 	}else{
-	AbstractsVocab <- AbstractsTidy %>%
+	AbstractsVocab <- AbstractsVocab %>%
   		dplyr::mutate(Normalized = VocabScore/YearlyPapers)
 	}
 
