@@ -465,7 +465,7 @@ plot_citationCount<- function (df.list, legend, smooth=FALSE)
 
   p<-ggplot2::ggplot(melted, 
 	ggplot2::aes(Year, value, color=series))
-  if (smooth = FALSE)
+  if (smooth == FALSE)
   {
 	p<- p + ggplot2::geom_line()
   }else{
