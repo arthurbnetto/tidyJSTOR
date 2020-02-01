@@ -440,7 +440,7 @@ CitationCount<-function(df)
 	dplyr::summarise(count = n())
 }
 
-plot_citationCount<- function (df.list, legend, smooth=FALSE)
+plot_citationCount<- function (df.list, legend, smooth=FALSE, YearLessThan)
 {
  '%>%'<-purrr::'%>%' 
   count<-lapply(df.list, CitationCount)
@@ -461,17 +461,23 @@ plot_citationCount<- function (df.list, legend, smooth=FALSE)
   }
 	
   melted <- reshape2::melt(comparison ,  id.vars = 'Year', variable.name = 'series')
- 
+  if (missing(YearLessThan))
+  {
+	melted<-melted
+  }else{
+  	melted<-melted%>%
+		filter(Year<YearLessThan)
+  }
 
   p<-ggplot2::ggplot(melted, 
 	ggplot2::aes(Year, value, color=series))
   if (smooth == FALSE)
   {
-	p<- p + ggplot2::geom_line()
+	p <- p + ggplot2::geom_line()
   }else{
 	p<- p+ ggplot2::geom_smooth(se=FALSE)
   }
-	p+ ggplot2::theme_bw()+
+	p + ggplot2::theme_bw()+
 	ggplot2::labs(x= "", y= "Citations")+
   	ggplot2::theme(panel.grid.minor = ggplot2::element_blank(), panel.border = ggplot2::element_rect(linetype = "solid", color = "grey", fill = NA), 
 		legend.position="bottom", legend.direction="horizontal", legend.title = ggplot2::element_blank(),
