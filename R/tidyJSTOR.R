@@ -510,14 +510,20 @@ CitationCount<-function(df)
 plot_citationCount<- function (df.list, legend, smooth=FALSE, YearLessThan)
 {
  '%>%'<-purrr::'%>%' 
-  count<-lapply(df.list, CitationCount)
-  comparison <- count[[1]]
-  i =2
-  while (i <= length (df.list))
+
+  if (typeof(df.list[[1]]) == "character")
   {
-	comparison<-comparison%>%
+  	comparison<-CitationCount(df.list)
+  }else{
+  	count<-lapply(df.list, CitationCount)
+  	comparison <- count[[1]]
+ 	i =2
+  	while (i <= length (df.list))
+  	{
+		comparison<-comparison%>%
 		dplyr::full_join(count[[i]], by = "Year")
-	i <- i+1
+		i <- i+1
+ 	}
   }
 
   if (missing(legend) == TRUE) 
