@@ -499,7 +499,7 @@ JSTORplotJournals <- function (df,y, x)
   	graph
 }
 
-CitationCount<-function(df)
+SearchCount<-function(df)
 {
 '%>%'<-purrr::'%>%'
  	df%>%
@@ -507,15 +507,15 @@ CitationCount<-function(df)
 	dplyr::summarise(count = n())
 }
 
-plot_citationCount<- function (df.list, legend, smooth=FALSE, YearLessThan)
+plot_search<- function (df.list, legend, smooth=FALSE, YearLessThan)
 {
  '%>%'<-purrr::'%>%' 
 
   if (typeof(df.list[[1]]) == "character")
   {
-  	comparison<-CitationCount(df.list)
+  	comparison<-SearchCount(df.list)
   }else{
-  	count<-lapply(df.list, CitationCount)
+  	count<-lapply(df.list, SearchCount)
   	comparison <- count[[1]]
  	i =2
   	while (i <= length (df.list))
