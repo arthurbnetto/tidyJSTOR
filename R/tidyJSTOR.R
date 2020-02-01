@@ -466,7 +466,7 @@ plot_citationCount<- function (df.list, legend, smooth=FALSE, YearLessThan)
 	melted<-melted
   }else{
   	melted<-melted%>%
-		filter(Year<YearLessThan)
+		dplyr::filter(Year<YearLessThan)
   }
 
   p<-ggplot2::ggplot(melted, 
