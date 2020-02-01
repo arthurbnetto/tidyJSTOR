@@ -405,20 +405,35 @@ if (output == "graphical")
 }
 
 ##############################################
-#Função que plota os x journals que mais publicaram para cada ano
-JSTORplotJournals <- function (df, x)
+#Função que plota os top y journals que estiveram no topo pelo menos em x anos distintos
+JSTORplotJournals <- function (df,y, x)
 {
 	'%>%'<-purrr::'%>%'
  
 	MençõesJournal <- df%>%
 		dplyr::count(Year, Journal, sort = TRUE)%>%
 		dplyr::group_by(Year)%>%
-		dplyr::top_n(x)%>%
+		dplyr::top_n(y)%>%
 		dplyr::arrange(dplyr::desc(Year))%>%
 		dplyr::ungroup()
 
+ 	k <- !sum(as.numeric(stringr::str_detect(MençõesJournal$Journal, MençõesJournal$Journal[1])), na.rm=TRUE)<x
+	i=2
+  	while(i<=nrow(MençõesJournal))
+  	{
+    		a <- !sum(as.numeric(stringr::str_detect(MençõesJournal$Journal, MençõesJournal$Journal[i])), na.rm=TRUE)<x
+    		k <- rbind(k, a)
+    		i = i+1
+  	}
+
+  	k <- data.frame(k)
+  	MençõesJournal <- cbind(MençõesJournal, logi = k[,1])
+
+  	MençõesJournal <- MençõesJournal %>%
+    		dplyr::filter(logi>0)
+
 	graph<-ggplot2::ggplot(MençõesJournal, 
-		ggplot2::aes(Year, Journal, size = n)) +
+		ggplot2::aes(Year, reorder(Journal, Year), size = n)) +
 		ggplot2::geom_point()+
 		ggplot2::theme_bw()+
 		ggplot2::labs(x= "", y= "")+
