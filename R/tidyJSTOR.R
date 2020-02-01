@@ -388,14 +388,21 @@ JSTORplotVocabCount <- function (dfEco, ArrayVocab, titles = FALSE, StopWords = 
   		dplyr::inner_join(vocab) %>%
   		dplyr::group_by(Year) %>%
   		dplyr::summarise (VocabScore = sum(score), Count = n())%>%
-  		dplyr::inner_join(Total)%>%
+  		dplyr::inner_join(Total)
+	if (missing(scores))
+	{
+	AbstractsVocab <- AbstractsTidy %>%
   		dplyr::mutate(Normalized = Count/YearlyPapers)
+	}else{
+	AbstractsVocab <- AbstractsTidy %>%
+  		dplyr::mutate(Normalized = VocabScore/YearlyPapers)
+	}
 
 	graph <-ggplot2::ggplot(AbstractsVocab, 
 		ggplot2::aes(Year, Normalized)) + 
 		ggplot2::geom_line(stat = "identity", fill = "navyblue", color = "black") +
 		ggplot2::theme_bw()+
-		ggplot2::labs(x= "", y= "Word Count/Yearly Papers")+
+		ggplot2::labs(x= "", y= "Word Count(score)/Yearly Papers")+
   		ggplot2::theme(panel.grid.minor = ggplot2::element_blank(), panel.border = ggplot2::element_rect(linetype = "solid", color = "grey", fill = NA), 
 			legend.position="bottom", legend.direction="horizontal", legend.title = ggplot2::element_blank(),
 			#strip.text.x = element_text(size = 12, colour = "black"),
