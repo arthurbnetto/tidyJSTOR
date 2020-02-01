@@ -341,7 +341,7 @@ JSTORrepeatedTopBigrams <- function (dfEco, y, x, StopWords = TRUE)
 #' @import dplyr
 #'
 #' @export
-JSTORplotVocabCount <- function (dfEco, ArrayVocab, titles = FALSE, StopWords = TRUE, output = "dataframe", scores)
+VocabCount <- function (dfEco, ArrayVocab, titles = FALSE, StopWords = TRUE, scores)
 {
 	
 
@@ -398,24 +398,62 @@ JSTORplotVocabCount <- function (dfEco, ArrayVocab, titles = FALSE, StopWords = 
   		dplyr::mutate(Normalized = VocabScore/YearlyPapers)
 	}
 
-	graph <-ggplot2::ggplot(AbstractsVocab, 
-		ggplot2::aes(Year, Normalized)) + 
-		ggplot2::geom_line(stat = "identity", fill = "navyblue", color = "black") +
-		ggplot2::theme_bw()+
-		ggplot2::labs(x= "", y= "Word Count(score)/Yearly Papers")+
-  		ggplot2::theme(panel.grid.minor = ggplot2::element_blank(), panel.border = ggplot2::element_rect(linetype = "solid", color = "grey", fill = NA), 
-			legend.position="bottom", legend.direction="horizontal", legend.title = ggplot2::element_blank(),
-			#strip.text.x = element_text(size = 12, colour = "black"),
-			axis.text.y = ggplot2::element_text(size=14),
-			axis.text.x = ggplot2::element_text(angle = 60, hjust = 1, size=14),
-			text=ggplot2::element_text(family="serif")) 
 
-if (output == "graphical")
-{
-	graph
-}else{
-	AbstractsVocab
+dplyr::select(AbstractsVocab, Year, Normalized)
 }
+
+JSTORplotVocabCount <- function (df.list, legend, smooth=FALSE, YearLessThan)
+{
+
+  '%>%'<-purrr::'%>%' 
+  if (typeof(df.list[[1]]) == "integer")
+  {
+  	comparison<-df.list
+  }else{
+  	comparison <- df.list[[1]]
+  	i = 2
+ 	 while (i <= length (df.list))
+ 	{
+		comparison<-comparison%>%
+		dplyr::full_join(df.list[[i]], by = "Year")
+		i <- i+1
+  	}
+  }
+
+  if (missing(legend) == TRUE) 
+  {
+  	comparison<-comparison
+  }else{
+	colnames(comparison)<-c("Year", legend)
+  }
+	
+  melted <- reshape2::melt(comparison ,  id.vars = 'Year', variable.name = 'series')
+  if (missing(YearLessThan))
+  {
+	melted<-melted
+  }else{
+  	melted<-melted%>%
+		dplyr::filter(Year<YearLessThan)
+  }
+
+
+	p<-ggplot2::ggplot(melted, 
+	ggplot2::aes(Year, value, color=series))
+  if (smooth == FALSE)
+  {
+	p <- p + ggplot2::geom_line()
+  }else{
+	p<- p+ ggplot2::geom_smooth(se=FALSE)
+  }
+	p + ggplot2::theme_bw()+
+	ggplot2::labs(x= "", y= "Citations")+
+  	ggplot2::theme(panel.grid.minor = ggplot2::element_blank(), panel.border = ggplot2::element_rect(linetype = "solid", color = "grey", fill = NA), 
+		legend.position="bottom", legend.direction="horizontal", legend.title = ggplot2::element_blank(),
+		#strip.text.x = element_text(size = 12, colour = "black"),
+		axis.text.y = ggplot2::element_text(size=14),
+		axis.text.x = ggplot2::element_text(angle = 60, hjust = 1, size=14),
+		text=ggplot2::element_text(family="serif")) 
+
 }
 
 ##############################################
