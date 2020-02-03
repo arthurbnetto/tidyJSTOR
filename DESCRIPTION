@@ -7,11 +7,16 @@ Maintainer: Arthur Brackmann Netto <arthurbnetto@gmail.com>
 Description: Tranforms JSTOR's XML data from data for research tool into tidy dataframes. 
     Cleans the data and produces ggplot2 charts for visualization and analysis.
 Imports:
-    ggplot2,
+    XML,
     pbapply,
-    tidytext,
     dplyr,
-    XML
+    purr,
+    stringr,
+    reshape2,
+    ggplot2,
+    tm,
+    tidytext,
+    tidyr
 License: 
 Encoding: UTF-8
 LazyData: FALSE
