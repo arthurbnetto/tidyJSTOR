@@ -128,11 +128,12 @@ plotCleaningResult <- function(dfClean, dfDirt)
 		axis.text.y = ggplot2::element_text(size=14),
 		axis.text.x = ggplot2::element_text(angle = 60, hjust = 1, size=14),
 		text=ggplot2::element_text(family="serif")) 
+  
 }
 
 ##############################################
 #Função que plota palavras que aparecem pelo menos x anos no top y
-JSTORrepeatedTopwords <- function (dfEco, y, x, StopWords = TRUE)
+JSTORrepeatedTopwords <- function (dfEco, y, x, StopWords = TRUE, output = "plot")
 {
 	if (StopWords == TRUE)
 	{
@@ -189,12 +190,19 @@ JSTORrepeatedTopwords <- function (dfEco, y, x, StopWords = TRUE)
 		axis.text.x = ggplot2::element_text(angle = 60, hjust = 1, size=14),
 		text=ggplot2::element_text(family="serif")) 
 
-  graph
+  if(output=="plot")
+  {
+  	graph
+  }
+  if(output=="dataframe")
+  {
+  	AbstractsTidyYear
+  }
 }
 
 ##############################################
 #Função que plota palavras que aparecem pelo menos x anos no top y
-JSTORrepeatedTopTrigrams <- function (dfEco, y, x, StopWords=TRUE)
+JSTORrepeatedTopTrigrams <- function (dfEco, y, x, StopWords=TRUE, output="plot")
 {
 
 	if (StopWords == TRUE)
@@ -253,13 +261,20 @@ JSTORrepeatedTopTrigrams <- function (dfEco, y, x, StopWords=TRUE)
 		axis.text.x = ggplot2::element_text(angle = 60, hjust = 1, size=14),
 		text=ggplot2::element_text(family="serif")) 
 
-  graph
+  if(output=="plot")
+  {
+  	graph
+  }
+  if(output=="dataframe")
+  {
+  	AbstractsTidyTriYear
+  }
 }
 
 
 
 
-JSTORrepeatedTopBigrams <- function (dfEco, y, x, StopWords = TRUE)
+JSTORrepeatedTopBigrams <- function (dfEco, y, x, StopWords = TRUE, output = "plot")
 {
 
 	if (StopWords == TRUE)
@@ -321,7 +336,14 @@ JSTORrepeatedTopBigrams <- function (dfEco, y, x, StopWords = TRUE)
 		axis.text.x = ggplot2::element_text(angle = 60, hjust = 1, size=14),
 		text=ggplot2::element_text(family="serif")) 
 
-  graph
+  if(output=="plot")
+  {
+  	graph
+  }
+  if(output=="dataframe")
+  {
+  	AbstractsTidyBiYear
+  }
 }
 
 
@@ -458,7 +480,7 @@ JSTORplotVocabCount <- function (df.list, legend, smooth=FALSE, YearLessThan)
 
 ##############################################
 #Função que plota os top y journals que estiveram no topo pelo menos em x anos distintos
-JSTORplotJournals <- function (df,y, x)
+JSTORplotJournals <- function (df,y, x, output = "plot")
 {
 	'%>%'<-purrr::'%>%'
  
@@ -496,7 +518,14 @@ JSTORplotJournals <- function (df,y, x)
 			axis.text.x = ggplot2::element_text(angle = 60, hjust = 1, size=14),
 			text=ggplot2::element_text(family="serif")) 
 
-  	graph
+  	if(output=="plot")
+  	{
+  		graph
+  	}
+  	if(output=="dataframe")
+  	{
+  		MençõesJournal
+  	}
 }
 
 SearchCount<-function(df)
@@ -558,4 +587,106 @@ plot_search<- function (df.list, legend, smooth=FALSE, YearLessThan)
 		axis.text.y = ggplot2::element_text(size=14),
 		axis.text.x = ggplot2::element_text(angle = 60, hjust = 1, size=14),
 		text=ggplot2::element_text(family="serif")) 
+}
+
+compareJSTOR_dfs <- function(df1, df2,y, x, legend, comparisonType)
+{
+
+	'%>%'<-purrr::'%>%'
+
+	if(comparisonType == "Bigrams"){
+		comparison_df1<-JSTORrepeatedTopBigrams(df1, y, x, StopWords = TRUE, output = "dataframe")
+		comparison_df2<-JSTORrepeatedTopBigrams(df2, y, x, StopWords = TRUE, output = "dataframe")
+	}
+	if(comparisonType == "Words"){
+		comparison_df1<-JSTORrepeatedTopWords(df1, y, x, StopWords = TRUE, output = "dataframe")
+		comparison_df2<-JSTORrepeatedTopWords(df2, y, x, StopWords = TRUE, output = "dataframe")
+	}
+	if(comparisonType == "Trigrams"){
+		comparison_df1<-JSTORrepeatedTopTrigrams(df1, y, x, StopWords = TRUE, output = "dataframe")
+		comparison_df2<-JSTORrepeatedTopTrigrams(df2, y, x, StopWords = TRUE, output = "dataframe")
+	}
+	if(comparisonType == "Journal"){
+		comparison_df1<-JSTORrepeatedTopBigrams(df1, y, x, output = "dataframe")
+		comparison_df2<-JSTORrepeatedTopBigrams(df2, y, x, output = "dataframe")
+	}
+
+
+
+	if(missing(legend))
+	{
+  		comparison_df2 <- comparison_df2 %>%
+			dplyr::mutate(type = "df2")
+	}else{
+		comparison_df2 <- comparison_df2 %>%
+			dplyr::mutate(type = legend[2])
+	}
+
+	if(missing(legend))
+	{
+  		comparison_df1 <- comparison_df1 %>%
+			dplyr::mutate(type = "df1")
+	}else{
+		comparison_df1 <- comparison_df1 %>%
+			dplyr::mutate(type = legend[1])
+	}
+
+	Binded <- dplyr::bind_rows(comparison_df1, comparison_df2)
+
+	toPlot <- Binded%>%
+ 		dplyr::group_by(Year, type)%>%
+		dplyr::mutate(k = n/sum(n))
+
+	toPlot <- toPlot%>%
+ 		dplyr::group_by(Year, type)%>%
+ 		dplyr::top_n(n = y, wt = k)%>%
+ 		dplyr::arrange(desc(Year))%>%
+ 		dplyr::ungroup()
+
+	toPlot$bigram <- strtrim(toPlot$bigram, 50)
+
+	odd <- seq(1, ((nrow(toPlot))+nrow(toPlot)%%2), 2)
+	even <- seq(2, (nrow(toPlot)), 2)
+
+	plot <- ggplot2::ggplot(toPlot, 
+		 ggplot2::aes(Year, reorder(stringr::str_wrap(bigram, 30), Year), shape = type, size = 200)) + 
+		 ggplot2::geom_point()
+
+	if(comparisonType == "Bigrams"){
+		plot <- ggplot2::ggplot(toPlot, 
+		 	ggplot2::aes(Year, reorder(stringr::str_wrap(bigram, 30), Year), shape = type, size = 200)) + 
+		 	ggplot2::geom_point()
+	}
+	if(comparisonType == "Words"){
+		plot <- ggplot2::ggplot(toPlot, 
+		 	ggplot2::aes(Year, reorder(stringr::str_wrap(word, 30), Year), shape = type, size = 200)) + 
+		 	ggplot2::geom_point()
+	}
+	if(comparisonType == "Trigrams"){
+		plot <- ggplot2::ggplot(toPlot, 
+		 	ggplot2::aes(Year, reorder(stringr::str_wrap(trigram, 30), Year), shape = type, size = 200)) + 
+		 	ggplot2::geom_point()
+	}
+	if(comparisonType == "Journal"){
+		plot <- ggplot2::ggplot(toPlot, 
+		 	ggplot2::aes(Year, reorder(stringr::str_wrap(Journal, 30), Year), shape = type, size = 200)) + 
+		 	ggplot2::geom_point()
+	}
+
+
+
+	plot<- plot + ggplot2::geom_hline(data=odd, yintercept=odd, Menções, linetype="longdash", color="grey") +
+		 ggplot2::geom_hline(data=even, yintercept=even, Menções, linetype="dotdash",color="grey") +
+		 ggplot2::geom_point(color = "black")+	
+		 ggplot2::scale_shape_manual(values=c(4, 0))+ 
+ 		 ggplot2::labs(x="", y="") +
+		 ggplot2::guides(size = FALSE)+
+		 ggplot2::theme_bw() +  
+		 ggplot2::theme(panel.grid.major = ggplot2::element_blank(), panel.grid.minor = ggplot2::element_blank(), 
+					panel.border = ggplot2::element_rect(linetype = "solid", color = "grey", fill = NA), 
+					legend.position="bottom", legend.direction="horizontal", legend.title = ggplot2::element_blank(),
+					strip.text.x = ggplot2::element_text(size = 12, colour = "black"),
+					axis.text.y = ggplot2::element_text(size=7),
+					text=ggplot2::element_text(family="serif"))  
+	plot
 }
