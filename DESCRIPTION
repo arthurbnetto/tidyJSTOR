@@ -10,7 +10,7 @@ Imports:
     XML,
     pbapply,
     dplyr,
-    purr,
+    purrr,
     stringr,
     reshape2,
     ggplot2,
