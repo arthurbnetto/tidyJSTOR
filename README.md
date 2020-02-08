@@ -24,14 +24,14 @@ Once we have both dataframes it is possbile to plot the cleaning results.
     
 A typical output would be as the following:
 
-![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/clean.jpeg)
+![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/imagesReadMe/clean.jpeg)
 
 It seems that the cleaning process has not produced any problem other than discarding a hihg volume of documents. Let's see how the dataframe looks now:
 
     View(head(dfClean))
 
 
-![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/dfHead.jpeg)
+![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/imagesReadMe/dfHead.jpeg)
 
 Now, with a clean dataset, it is possible to start some exploratory analysis. First, let's have a look into which were the words that were most used in our dataset. More specifically let's which were the words that were in the top 5 most used words for at least 3 years:
            
@@ -39,7 +39,7 @@ Now, with a clean dataset, it is possible to start some exploratory analysis. Fi
 
 The output is the following:
 
-![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/topwords.jpeg)
+![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/imagesReadMe/topwords.jpeg)
 
 The same can be done for bigrams and trigrams using the commands JSTORrepeatedTopBigrams and JSTORrepeatedTopTrigrams.
 
@@ -54,7 +54,7 @@ A simlar graph can be built for journals. Instead of observing the main words ov
      
 the main journals over time of our dataset are the following:
 
-![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/journals.jpeg)
+![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/imagesReadMe/journals.jpeg)
 
 The final graph allows to observe the trend of specific clusters of words in the abstracts. Hence, imagine we are interested in observing how words related to theory evolved inside the papers in our dataset. We could create an array of words related to theory such as: c("theory", "theories", "theoretical"). With this array we could plot the evolution of this words inside our dataframe in the following manner:
 
@@ -63,11 +63,11 @@ The final graph allows to observe the trend of specific clusters of words in the
     
 The output would be this:
 
-![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/theory.jpeg)
+![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/imagesReadMe/theory.jpeg)
 
 The first function counts the number of appearences of those words and normalizes according to the number of papers in each year. The dataframe looks as follows and the graph simply plots it.
 
-![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/theoryHead.jpeg)
+![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/imagesReadMe/theoryHead.jpeg)
 
 Our results are interesting, but we could go further and compare theoretical words with empirical words. We can now create an array of words related to empirical research such as: c("empirical", "data", "empirically"). Following the same procedure for creating the dataframe, the code wwould be as follows:
 
@@ -80,7 +80,7 @@ The next step is creating a list with our searched sets of words for in the sequ
 
 The resultant chart is the following:
 
-![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/theoryempirical.jpeg)
+![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/imagesReadMe/theoryempirical.jpeg)
     
 Considering that changes in mentions to specific words from year to year are hard to interpret, the function allows to smooth the data in order to oberve in a more clear way what were the trends. It is also possible to constraint maximum year of analysis. Putting together these two changes will result in the following line of code:
 
@@ -88,7 +88,7 @@ Considering that changes in mentions to specific words from year to year are har
     
 The output is arguably easier to interpret:
 
-![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/theoryempiricalsmooth.jpeg)
+![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/imagesReadMe/theoryempiricalsmooth.jpeg)
 
 The vocabCount function also allows a different kind of comparison between words. Remaining with empirical and theoretical words, let's say that we consider some words more important than others. We could say that the use of a word such as "empirical" is more important than the word "data" to define if a paper is empirical. The same could be said about the words "theoretical" and "theory". We could also imagine that the characterization of a paper between empirical and theoretical is a matter of how higher is the score (count) for empirical words when compared to theoretical words. The VocabCount function allows to provide a score vector for words in a manner that we could say that one count of the word "empirical" is valued 5 and one of "data" only 1, while one count of the word "theoretical" is valued -5 and one of "theory" only -1. the code would be the following:
 
@@ -98,7 +98,7 @@ We surely want to see that on a graph. For that, the code is:
 
     JSTORplotVocabCount(EmpVs.Theo, "Empirical(<1) x Theory(>1)")
     
-![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/empvstheo.jpeg)
+![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/imagesReadMe/empvstheo.jpeg)
     
 Make sure to remember whether you used counts or scores for a sound interpretation of the graphs. We are almost done in our analysis, and we can see that empirical words have come to dominate our dataset over time. A question arises when noticing that. Experiments in economics can be both psychological experiments following a tradition of experimental/behavioral economics aor field/quasi experiments that follow the tradition of labor eocnomics and evaluaiton of public policies. Has any of those been more important in our analysis. To discover that, I realized to different searches in JSTOR dfr: 1) "experiment AND 'Ashenfelter'", constrained to the economics discipline; constrained to only journals. 2) "experiment AND 'Kahneman'", constrained to the economics discipline; constrained to only journals. Ashenfelter is a famous labor economist and proposer of experimentation in the evaluation of public policies while Kahneman is a known proposer of experimental and behavioral economics. We want to know how many times they were cited together with the word experiment in economics' journals. We don't need to clean the dataset for that. We only need to plot the search count for each different search. First lets transform our JSTOR files into dataframes and store them in a list.
 
@@ -112,7 +112,7 @@ With the list, we can now plot both search results:
 
 The plot is the following:
 
-![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/ashenfelterkahneman1.jpeg)
+![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/imagesReadMe/ashenfelterkahneman1.jpeg)
 
 Considering that for the last 5 or 10 years publishers held different agreements with JSTOR - which creates a severe drop in the number of articles and a considerably different selection of journals is available in tha dataset -, the drop in the count should not be taken into consideration. From this point of view, it is also advisable to constraint the analysis to the year before 2010. We can also smooth the data to avoid being lost in analysing small and artifactual changes:
 
@@ -120,4 +120,4 @@ Considering that for the last 5 or 10 years publishers held different agreements
     
 The figure that we have now is the following:
 
-![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/ashenfelterkahneman2.jpeg)
+![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/imagesReadMe/ashenfelterkahneman2.jpeg)
