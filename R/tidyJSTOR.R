@@ -6,7 +6,7 @@
 #'
 #' @description This function transforms JSTOR DFR files into single row tidy dataframes
 #'
-#' @param filePath
+#' @param filePath A file path
 #'
 #' @return A single row dataframe containing informations about: Journal, Publisher, Title, Year, Abstract and Language
 #'
@@ -16,7 +16,6 @@
 #' @export
 
 ###########################################
-#Função que percorre os caminhos de um arquivo xml e retorna um df (1x1) com os dados
 Transform <- function (filePath)
 {
   a <- XML::xmlParse (filePath)
@@ -42,7 +41,7 @@ Transform <- function (filePath)
 #'
 #' @description This function transforms all files in a folder with JSTOR's DFR metada into a tidy dataframes
 #'
-#' @param filePath
+#' @param filePath A file path
 #'
 #' @return A dataframe containing informations about: Journal, Publisher, Title, Year, Abstract and Language
 #'
@@ -61,7 +60,26 @@ JSTOR_df <- function (filePath)
   
 }
 
-#Função que limpa os dados do data frame de abstracts ou titulos
+##########################################################################
+##########################################################################
+##########################################################################
+
+#' @title CleanJSTOR_df
+#'
+#' @description This cleans a JSTOR_df, excluding repeated name papers, non-english papers, NAs (in titles or abstracts)
+#'
+#' @param df A dataframe in the JSTOR_df format (see: JSTOR_df())
+#'
+#' @param Titles whether to clean titles (instead of abstracts). Default = FALSE.
+#'
+#' @return A JSTOR_df dataframe containing informations about: Journal, Publisher, Title, Year, Abstract and Language
+#'
+#' @examples CleanJSTOR_df(df)
+#'
+#'
+#' @export
+
+###########################################
 CleanJSTOR_df <- function (df, Titles=FALSE)
 {
 
@@ -96,9 +114,26 @@ CleanJSTOR_df <- function (df, Titles=FALSE)
 
   df
 }
+##########################################################################
+##########################################################################
+##########################################################################
+
+#' @title plotCleaningResult
+#'
+#' @description Plots number of documents per year in two distinct dataframes. Intended to use iwth a cleaned JSTOR_df and an original JSTOR_df
+#'
+#' @param dfClean A dataframe in the JSTOR_df format (see: JSTOR_df()) after using CleanJSTOR_df()
+#'
+#' @param dfDirt A dataframe in the JSTOR_df format (see: JSTOR_df())
+#'
+#' @return A plot
+#'
+#' @examples plotCleaningResult(df1, df2)
+#'
+#'
+#' @export
 
 ##############################################
-#Função que plota total de arquivos antes e após limpeza
 plotCleaningResult <- function(dfClean, dfDirt)
 {
 
@@ -131,8 +166,35 @@ plotCleaningResult <- function(dfClean, dfDirt)
   
 }
 
+##########################################################################
+##########################################################################
+##########################################################################
+
+#' @title JSTORrepeatedTopwords
+#'
+#' @description Creates dataframe or plot with information regarding top words that appear at least 
+#' for a determined time period in the top.
+#'
+#' @param dfEco A dataframe in the JSTOR_df format (see: JSTOR_df())
+#'
+#' @param y Determines the size of the ranking being observed for each year
+#'
+#' @param x Determines the number of times a words has to be part of the rank to 
+#' be included in the dataframe or plot
+#'
+#' @param StopWords Whether to use default StopWords or a custom dataframe of stop words. If opted
+#' for custom, a dataframe of two columns (word, lexicon = "custom") must be provided. 
+#'
+#' @param output Whether to output a dataframe or a plot. Acceptable entries: "plot" and "dataframe".
+#'
+#' @return A ggplot2 object or a dataframe
+#'
+#' @examples JSTORrepeatedTopwords(df, 3, 3)
+#'
+#'
+#' @export
+
 ##############################################
-#Função que plota palavras que aparecem pelo menos x anos no top y
 JSTORrepeatedTopwords <- function (dfEco, y, x, StopWords = TRUE, output = "plot")
 {
 	if (StopWords == TRUE)
@@ -199,6 +261,33 @@ JSTORrepeatedTopwords <- function (dfEco, y, x, StopWords = TRUE, output = "plot
   	AbstractsTidyYear
   }
 }
+##########################################################################
+##########################################################################
+##########################################################################
+
+#' @title JSTORrepeatedTopTrigrams
+#'
+#' @description Creates dataframe or plot with information regarding top Trigrams that appear at least 
+#' for a determined time period in the top.
+#'
+#' @param dfEco A dataframe in the JSTOR_df format (see: JSTOR_df()) 
+#'
+#' @param y Determines the size of the ranking being observed for each year
+#'
+#' @param x Determines the number of times a trigram has to be part of the rank to 
+#' be included in the dataframe or plot
+#'
+#' @param StopWords Whether to use default StopWords or a custom dataframe of stop words. If opted
+#' for custom, a dataframe of two columns (word, lexicon = "custom") must be provided. 
+#'
+#' @param output Whether to output a dataframe or a plot. Acceptable entries: "plot" and "dataframe".
+#'
+#' @return A ggplot2 object or a dataframe
+#'
+#' @examples JSTORrepeatedTopTrigrams(df, 3, 3)
+#'
+#'
+#' @export
 
 ##############################################
 #Função que plota palavras que aparecem pelo menos x anos no top y
@@ -271,9 +360,35 @@ JSTORrepeatedTopTrigrams <- function (dfEco, y, x, StopWords=TRUE, output="plot"
   }
 }
 
+##########################################################################
+##########################################################################
+##########################################################################
 
+#' @title JSTORrepeatedTopBigrams
+#'
+#' @description Creates dataframe or plot with information regarding top bigrams that appear at least 
+#' for a determined time period in the top.
+#'
+#' @param dfEco A dataframe in the JSTOR_df format (see: JSTOR_df()) 
+#'
+#' @param y Determines the size of the ranking being observed for each year
+#'
+#' @param x Determines the number of times a bigram has to be part of the rank to 
+#' be included in the dataframe or plot
+#'
+#' @param StopWords Whether to use default StopWords or a custom dataframe of stop words. If opted
+#' for custom, a dataframe of two columns (word, lexicon = "custom") must be provided. 
+#'
+#' @param output Whether to output a dataframe or a plot. Acceptable entries: "plot" and "dataframe".
+#'
+#' @return A ggplot2 object or a dataframe
+#'
+#' @examples JSTORrepeatedTopBigrams(df, 3, 3)
+#'
+#'
+#' @export
 
-
+##############################################
 JSTORrepeatedTopBigrams <- function (dfEco, y, x, StopWords = TRUE, output = "plot")
 {
 
@@ -346,23 +461,35 @@ JSTORrepeatedTopBigrams <- function (dfEco, y, x, StopWords = TRUE, output = "pl
   }
 }
 
+##########################################################################
+##########################################################################
+##########################################################################
 
-##############################################
-#Função que plota contagem de palavras por ano daquele determinado dataframe (obs: pode ser uma seleção)
-# exemplo ArrayVocab = c("theory", "theories", "theoretical")
-#' @title JSTORplotVocabCount
+#' @title JSTORVocabCount
 #'
-#' @description This function counts the number of appeares of a set of words in abstracts or titles of a tidyJSTOR dataframe
+#' @description This function counts the number of appearences of a set of words in abstracts or titles of a tidyJSTOR dataframe
 #'
-#' @param dfEco, ArrayVocab, titles = FALSE, StopWords
+#' @param dfEco A dataframe in the JSTOR_df format (see: JSTOR_df())
 #'
-#' @return A ggplot2 graph 
+#' @param ArrayVocab a vector of charcters ot be counted as c("word1", "word2", ..., "wordn")
 #'
-#' @examples JSTORplotVocabCount(df, c("theory", "theories", "theoretical"), titles=FALSE)
+#' @param titles Whether to analyze titles of abstracts. Default titles = FALSE 
 #'
-#' @import dplyr
+#' @param StopWords Whether to use default StopWords or a custom dataframe of stop words. If opted
+#' for custom, a dataframe of two columns (word, lexicon = "custom") must be provided. 
+#'
+#' @param scores a vector of scores matching the vector of character in the parameter ArrayVocab
+#'
+#' @return A dataframe of counted words JSTORVocabCount 
+#'
+#' @examples JSTORplotVocabCount(df, c("theory", "theories", "theoretical"))
+#'
+#' JSTORVocabCount(df, c("theory", "theories", "theoretical"), scores = c(1,2,3))
 #'
 #' @export
+
+##########################################################################
+
 VocabCount <- function (dfEco, ArrayVocab, titles = FALSE, StopWords = TRUE, scores)
 {
 	
@@ -424,6 +551,32 @@ VocabCount <- function (dfEco, ArrayVocab, titles = FALSE, StopWords = TRUE, sco
 dplyr::select(AbstractsVocab, Year, Normalized)
 }
 
+##########################################################################
+##########################################################################
+##########################################################################
+
+#' @title JSTORplotVocabCount
+#'
+#' @description This function plots the number of appearences of a set of words in abstracts or titles of a tidyJSTOR dataframe
+#'
+#' @param df.list A list or a single dataframe in the JSTOR_df format (see: JSTOR_df())
+#'
+#' @param legend A vector of charcters to be used as legends matching 
+#' the number of df in df.list c("legend1", "legend2", ..., "legendN")
+#'
+#' @param smooth Whether to smooth curves. Default smooth = FALSE
+#'
+#' @param YearLessThan Upper bound for the years being ploted
+#'
+#' @return A dataframe of counted words JSTORVocabCount 
+#'
+#' @examples JSTORplotVocabCount(df, c("theory", "theories", "theoretical"))
+#'
+#' JSTORplotVocabCount(c(df1, df2), c("df1Legend", "df2Legend"), smooth =TRUE, 2010)
+#'
+#' @export
+
+##########################################################################
 JSTORplotVocabCount <- function (df.list, legend, smooth=FALSE, YearLessThan)
 {
 
@@ -478,8 +631,32 @@ JSTORplotVocabCount <- function (df.list, legend, smooth=FALSE, YearLessThan)
 
 }
 
+##########################################################################
+##########################################################################
+##########################################################################
+
+#' @title JSTORplotJournals
+#'
+#' @description Creates dataframe or plot with information regarding top Journal that appear at least 
+#' for a determined time period in the top.
+#'
+#' @param dfEco A dataframe in the JSTOR_df format (see: JSTOR_df()) 
+#'
+#' @param y Determines the size of the ranking being observed for each year
+#'
+#' @param x Determines the number of times a bigram has to be part of the rank to 
+#' be included in the dataframe or plot
+#'
+#' @param output Whether to output a dataframe or a plot. Acceptable entries: "plot" and "dataframe".
+#'
+#' @return A ggplot2 object or a dataframe
+#'
+#' @examples 
+#'
+#'
+#' @export
 ##############################################
-#Função que plota os top y journals que estiveram no topo pelo menos em x anos distintos
+
 JSTORplotJournals <- function (df,y, x, output = "plot")
 {
 	'%>%'<-purrr::'%>%'
@@ -528,6 +705,23 @@ JSTORplotJournals <- function (df,y, x, output = "plot")
   	}
 }
 
+##########################################################################
+##########################################################################
+##########################################################################
+
+#' @title SearchCount
+#'
+#' @description Creates a dataframe with counted number of documents for each year in a JSTOR_df
+#'
+#' @param df A dataframe in the JSTOR_df format (see: JSTOR_df()) 
+#'
+#' @return A dataframe of counted documents per year for a JSTOR_df 
+#'
+#' @examples 
+#'
+#' @export
+##############################################
+
 SearchCount<-function(df)
 {
 '%>%'<-purrr::'%>%'
@@ -535,6 +729,31 @@ SearchCount<-function(df)
 	dplyr::group_by(Year)%>%
 	dplyr::summarise(count = n())
 }
+
+##########################################################################
+##########################################################################
+##########################################################################
+
+#' @title plot_search
+#'
+#' @description Plots number of documents per year in JSTOR_df after using SearchCount()
+#'
+#' @param df.list A list or a single dataframe in the JSTOR_df format (see: JSTOR_df())
+#'
+#' @param legend A vector of charcters to be used as legends matching 
+#' the number of df in df.list c("legend1", "legend2", ..., "legendN")
+#'
+#' @param smooth Whether to smooth curves. Default smooth = FALSE
+#'
+#' @param YearLessThan Upper bound for the years being ploted
+#'
+#' @return A plot of counted documents per year for a JSTOR_df 
+#'
+#' @examples
+#'
+#' @export
+##############################################
+
 
 plot_search<- function (df.list, legend, smooth=FALSE, YearLessThan)
 {
@@ -589,6 +808,37 @@ plot_search<- function (df.list, legend, smooth=FALSE, YearLessThan)
 		text=ggplot2::element_text(family="serif")) 
 }
 
+##########################################################################
+##########################################################################
+##########################################################################
+
+#' @title compareJSTOR_dfs
+#'
+#' @description Creates dataframe or plot with information regarding top bigrams that appear at least 
+#' for a determined time period in the top.
+#'
+#' @param df1 A dataframe in the JSTOR_df format (see: JSTOR_df()) 
+#'
+#' @param df2 A dataframe in the JSTOR_df format (see: JSTOR_df()) 
+#'
+#' @param y Determines the size of the ranking being observed for each year
+#'
+#' @param x Determines the number of times a bigram has to be part of the rank to 
+#' be included in the dataframe or plot
+#'
+#' @param legend A vector of charcters to be used as legends matching 
+#' the number of dfs (2): c("legend1", "legend2")
+#'
+#' @param comparisonType  Which type of caomparison to make. Acceptable entries: "Words", "Bigrams", "Trigrams" and "Journal".
+#'
+#' @return A ggplot2 object 
+#'
+#' @examples compareJSTOR_dfs(dfx, dfk, 4, 4, c("legendx", "legendk", comparisonType = "Journal")
+#'
+#'
+#' @export
+
+##############################################
 compareJSTOR_dfs <- function(df1, df2,y, x, legend, comparisonType)
 {
 
