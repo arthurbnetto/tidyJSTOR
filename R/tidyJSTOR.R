@@ -599,8 +599,8 @@ compareJSTOR_dfs <- function(df1, df2,y, x, legend, comparisonType)
 		comparison_df2<-JSTORrepeatedTopBigrams(df2, y, x, StopWords = TRUE, output = "dataframe")
 	}
 	if(comparisonType == "Words"){
-		comparison_df1<-JSTORrepeatedTopWords(df1, y, x, StopWords = TRUE, output = "dataframe")
-		comparison_df2<-JSTORrepeatedTopWords(df2, y, x, StopWords = TRUE, output = "dataframe")
+		comparison_df1<-JSTORrepeatedTopwords(df1, y, x, StopWords = TRUE, output = "dataframe")
+		comparison_df2<-JSTORrepeatedTopwords(df2, y, x, StopWords = TRUE, output = "dataframe")
 	}
 	if(comparisonType == "Trigrams"){
 		comparison_df1<-JSTORrepeatedTopTrigrams(df1, y, x, StopWords = TRUE, output = "dataframe")
@@ -643,14 +643,8 @@ compareJSTOR_dfs <- function(df1, df2,y, x, legend, comparisonType)
  		dplyr::arrange(desc(Year))%>%
  		dplyr::ungroup()
 
-	toPlot$bigram <- strtrim(toPlot$bigram, 50)
-
 	odd <- seq(1, ((nrow(toPlot))+nrow(toPlot)%%2), 2)
 	even <- seq(2, (nrow(toPlot)), 2)
-
-	plot <- ggplot2::ggplot(toPlot, 
-		 ggplot2::aes(Year, reorder(stringr::str_wrap(bigram, 30), Year), shape = type, size = 200)) + 
-		 ggplot2::geom_point()
 
 	if(comparisonType == "Bigrams"){
 		plot <- ggplot2::ggplot(toPlot, 
@@ -672,8 +666,6 @@ compareJSTOR_dfs <- function(df1, df2,y, x, legend, comparisonType)
 		 	ggplot2::aes(Year, reorder(stringr::str_wrap(Journal, 30), Year), shape = type, size = 200)) + 
 		 	ggplot2::geom_point()
 	}
-
-
 
 	plot<- plot + ggplot2::geom_hline(data=odd, yintercept=odd, Menções, linetype="longdash", color="grey") +
 		 ggplot2::geom_hline(data=even, yintercept=even, Menções, linetype="dotdash",color="grey") +
