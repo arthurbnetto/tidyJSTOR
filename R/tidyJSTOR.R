@@ -607,8 +607,8 @@ compareJSTOR_dfs <- function(df1, df2,y, x, legend, comparisonType)
 		comparison_df2<-JSTORrepeatedTopTrigrams(df2, y, x, StopWords = TRUE, output = "dataframe")
 	}
 	if(comparisonType == "Journal"){
-		comparison_df1<-JSTORrepeatedTopBigrams(df1, y, x, output = "dataframe")
-		comparison_df2<-JSTORrepeatedTopBigrams(df2, y, x, output = "dataframe")
+		comparison_df1<-JSTORplotJournals(df1, y, x, output = "dataframe")
+		comparison_df2<-JSTORplotJournals(df2, y, x, output = "dataframe")
 	}
 
 
