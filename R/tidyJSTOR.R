@@ -4,7 +4,7 @@
 
 #' @title Transform
 #'
-#' @description This function transforms JSTOR DFR files into single row tidy dataframes
+#' @description This function transforms JSTOR DFR files into single row tidy datafrlabames
 #'
 #' @param filePath A file path
 #'
@@ -156,7 +156,7 @@ plotCleaningResult <- function(dfClean, dfDirt)
 	ggplot2::aes(Year, value, color=series))+
 	ggplot2::geom_line()+
 	ggplot2::theme_bw()+
-	ggplot2::labs(x= "", y= "Papers")+
+	ggplot2::labs(x= "", y= "Documents")+
   	ggplot2::theme(panel.grid.minor = ggplot2::element_blank(), panel.border = ggplot2::element_rect(linetype = "solid", color = "grey", fill = NA), 
 		legend.position="bottom", legend.direction="horizontal", legend.title = ggplot2::element_blank(),
 		#strip.text.x = element_text(size = 12, colour = "black"),
@@ -187,6 +187,8 @@ plotCleaningResult <- function(dfClean, dfDirt)
 #'
 #' @param output Whether to output a dataframe or a plot. Acceptable entries: "plot" and "dataframe".
 #'
+#' @param YearBounds Optional vector with inferior and superior Year bounds for the plot. Ex: c(1970,1990)
+#'
 #' @return A ggplot2 object or a dataframe
 #'
 #' @examples JSTORrepeatedTopwords(df, 3, 3)
@@ -195,7 +197,7 @@ plotCleaningResult <- function(dfClean, dfDirt)
 #' @export
 
 ##############################################
-JSTORrepeatedTopwords <- function (dfEco, y, x, StopWords = TRUE, output = "plot")
+JSTORrepeatedTopwords <- function (dfEco, y, x, StopWords = TRUE, output = "plot", YearBounds)
 {
 	if (StopWords == TRUE)
 	{
@@ -239,6 +241,15 @@ JSTORrepeatedTopwords <- function (dfEco, y, x, StopWords = TRUE, output = "plot
   AbstractsTidyYear <- AbstractsTidyYear %>%
     dplyr::filter(logi>0)
 
+  if (missing(YearBounds))
+  {
+       AbstractsTidyYear <- AbstractsTidyYear
+  }else{
+      AbstractsTidyYear <- AbstractsTidyYear%>%
+         dplyr::filter(Year>YearBounds[1])%>%
+         dplyr::filter(Year<YearBounds[2])
+  }
+
   #Vizualização
   graph<- ggplot2::ggplot(AbstractsTidyYear, 
 		ggplot2::aes(Year, reorder(word, Year), size = n)) +
@@ -252,14 +263,12 @@ JSTORrepeatedTopwords <- function (dfEco, y, x, StopWords = TRUE, output = "plot
 		axis.text.x = ggplot2::element_text(angle = 60, hjust = 1, size=14),
 		text=ggplot2::element_text(family="serif")) 
 
-  if(output=="plot")
-  {
-  	graph
-  }
-  if(output=="dataframe")
-  {
-  	AbstractsTidyYear
-  }
+     if(output=="dataframe")
+     {
+         AbstractsTidyYear
+     }else{if(output=="plot"){
+         graph
+     }}
 }
 ##########################################################################
 ##########################################################################
@@ -282,6 +291,8 @@ JSTORrepeatedTopwords <- function (dfEco, y, x, StopWords = TRUE, output = "plot
 #'
 #' @param output Whether to output a dataframe or a plot. Acceptable entries: "plot" and "dataframe".
 #'
+#' @param YearBounds Optional vector with inferior and superior Year bounds for the plot. Ex: c(1970,1990)
+#'
 #' @return A ggplot2 object or a dataframe
 #'
 #' @examples JSTORrepeatedTopTrigrams(df, 3, 3)
@@ -291,7 +302,7 @@ JSTORrepeatedTopwords <- function (dfEco, y, x, StopWords = TRUE, output = "plot
 
 ##############################################
 #Função que plota palavras que aparecem pelo menos x anos no top y
-JSTORrepeatedTopTrigrams <- function (dfEco, y, x, StopWords=TRUE, output="plot")
+JSTORrepeatedTopTrigrams <- function (dfEco, y, x, StopWords=TRUE, output="plot", YearBounds)
 {
 
 	if (StopWords == TRUE)
@@ -338,6 +349,15 @@ JSTORrepeatedTopTrigrams <- function (dfEco, y, x, StopWords=TRUE, output="plot"
 	AbstractsTidyTriYear <- AbstractsTidyTriYear %>%
 		dplyr::filter(logi>0)
 
+  	if (missing(YearBounds))
+  	{
+       		AbstractsTidyTriYear <- AbstractsTidyTriYear
+  	}else{
+      		AbstractsTidyTriYear <- AbstractsTidyTriYear%>%
+         		dplyr::filter(Year>YearBounds[1])%>%
+         		dplyr::filter(Year<YearBounds[2])
+  	}
+
 	graph<- ggplot2::ggplot(AbstractsTidyTriYear, 
 		ggplot2::aes(Year, reorder(trigram, Year), size = n)) +
     		ggplot2::geom_point()+
@@ -350,14 +370,12 @@ JSTORrepeatedTopTrigrams <- function (dfEco, y, x, StopWords=TRUE, output="plot"
 		axis.text.x = ggplot2::element_text(angle = 60, hjust = 1, size=14),
 		text=ggplot2::element_text(family="serif")) 
 
-  if(output=="plot")
-  {
-  	graph
-  }
-  if(output=="dataframe")
-  {
-  	AbstractsTidyTriYear
-  }
+     if(output=="dataframe")
+     {
+         AbstractsTidyTriYear
+     }else{if(output=="plot"){
+         graph
+     }}
 }
 
 ##########################################################################
@@ -381,6 +399,8 @@ JSTORrepeatedTopTrigrams <- function (dfEco, y, x, StopWords=TRUE, output="plot"
 #'
 #' @param output Whether to output a dataframe or a plot. Acceptable entries: "plot" and "dataframe".
 #'
+#' @param YearBounds Optional vector with inferior and superior Year bounds for the plot. Ex: c(1970,1990)
+#'
 #' @return A ggplot2 object or a dataframe
 #'
 #' @examples JSTORrepeatedTopBigrams(df, 3, 3)
@@ -389,7 +409,7 @@ JSTORrepeatedTopTrigrams <- function (dfEco, y, x, StopWords=TRUE, output="plot"
 #' @export
 
 ##############################################
-JSTORrepeatedTopBigrams <- function (dfEco, y, x, StopWords = TRUE, output = "plot")
+JSTORrepeatedTopBigrams <- function (dfEco, y, x, StopWords = TRUE, output = "plot", YearBounds)
 {
 
 	if (StopWords == TRUE)
@@ -439,6 +459,15 @@ JSTORrepeatedTopBigrams <- function (dfEco, y, x, StopWords = TRUE, output = "pl
   AbstractsTidyBiYear <- AbstractsTidyBiYear %>%
     dplyr::filter(logi>0)
 
+  	if (missing(YearBounds))
+  	{
+       		AbstractsTidyBiYear <- AbstractsTidyBiYear
+  	}else{
+      		AbstractsTidyBiYear <- AbstractsTidyBiYear%>%
+         		dplyr::filter(Year>YearBounds[1])%>%
+         		dplyr::filter(Year<YearBounds[2])
+  	}
+
   graph<- ggplot2::ggplot(AbstractsTidyBiYear, 
 		ggplot2::aes(Year, reorder(bigram, Year), size = n)) +
     		ggplot2::geom_point()+
@@ -451,14 +480,12 @@ JSTORrepeatedTopBigrams <- function (dfEco, y, x, StopWords = TRUE, output = "pl
 		axis.text.x = ggplot2::element_text(angle = 60, hjust = 1, size=14),
 		text=ggplot2::element_text(family="serif")) 
 
-  if(output=="plot")
-  {
-  	graph
-  }
-  if(output=="dataframe")
-  {
-  	AbstractsTidyBiYear
-  }
+     if(output=="dataframe")
+     {
+         AbstractsTidyBiYear
+     }else{if(output=="plot"){
+         graph
+     }}
 }
 
 ##########################################################################
@@ -566,7 +593,7 @@ dplyr::select(AbstractsVocab, Year, Normalized)
 #'
 #' @param smooth Whether to smooth curves. Default smooth = FALSE
 #'
-#' @param YearLessThan Upper bound for the years being ploted
+#' @param YearBounds Optional vector with inferior and superior Year bounds for the plot. Ex: c(1970,1990)
 #'
 #' @return A dataframe of counted words JSTORVocabCount 
 #'
@@ -577,7 +604,7 @@ dplyr::select(AbstractsVocab, Year, Normalized)
 #' @export
 
 ##########################################################################
-JSTORplotVocabCount <- function (df.list, legend, smooth=FALSE, YearLessThan)
+JSTORplotVocabCount <- function (df.list, legend, smooth=FALSE, YearBounds)
 {
 
   '%>%'<-purrr::'%>%' 
@@ -603,12 +630,14 @@ JSTORplotVocabCount <- function (df.list, legend, smooth=FALSE, YearLessThan)
   }
 	
   melted <- reshape2::melt(comparison ,  id.vars = 'Year', variable.name = 'series')
-  if (missing(YearLessThan))
+
+  if (missing(YearBounds))
   {
-	melted<-melted
+       melted<-melted
   }else{
-  	melted<-melted%>%
-		dplyr::filter(Year<YearLessThan)
+      melted<-melted%>%
+         dplyr::filter(Year>YearBounds[1])%>%
+         dplyr::filter(Year<YearBounds[2])
   }
 
 
@@ -621,7 +650,7 @@ JSTORplotVocabCount <- function (df.list, legend, smooth=FALSE, YearLessThan)
 	p<- p+ ggplot2::geom_smooth(se=FALSE)
   }
 	p + ggplot2::theme_bw()+
-	ggplot2::labs(x= "", y= "Citations")+
+	ggplot2::labs(x= "", y= "Count(or Score)")+
   	ggplot2::theme(panel.grid.minor = ggplot2::element_blank(), panel.border = ggplot2::element_rect(linetype = "solid", color = "grey", fill = NA), 
 		legend.position="bottom", legend.direction="horizontal", legend.title = ggplot2::element_blank(),
 		#strip.text.x = element_text(size = 12, colour = "black"),
@@ -649,6 +678,8 @@ JSTORplotVocabCount <- function (df.list, legend, smooth=FALSE, YearLessThan)
 #'
 #' @param output Whether to output a dataframe or a plot. Acceptable entries: "plot" and "dataframe".
 #'
+#' @param YearBounds Optional vector with inferior and superior Year bounds for the plot. Ex: c(1970,1990)
+#'
 #' @return A ggplot2 object or a dataframe
 #'
 #' @examples 
@@ -657,7 +688,7 @@ JSTORplotVocabCount <- function (df.list, legend, smooth=FALSE, YearLessThan)
 #' @export
 ##############################################
 
-JSTORplotJournals <- function (df,y, x, output = "plot")
+JSTORplotJournals <- function (df,y, x, output = "plot", YearBounds)
 {
 	'%>%'<-purrr::'%>%'
  
@@ -683,6 +714,15 @@ JSTORplotJournals <- function (df,y, x, output = "plot")
   	MençõesJournal <- MençõesJournal %>%
     		dplyr::filter(logi>0)
 
+  	if (missing(YearBounds))
+  	{
+       		MençõesJournal <- MençõesJournal
+  	}else{
+      		MençõesJournal <- MençõesJournal%>%
+         		dplyr::filter(Year>YearBounds[1])%>%
+         		dplyr::filter(Year<YearBounds[2])
+  	}
+
 	graph<-ggplot2::ggplot(MençõesJournal, 
 		ggplot2::aes(Year, reorder(Journal, Year), size = n)) +
 		ggplot2::geom_point()+
@@ -695,14 +735,12 @@ JSTORplotJournals <- function (df,y, x, output = "plot")
 			axis.text.x = ggplot2::element_text(angle = 60, hjust = 1, size=14),
 			text=ggplot2::element_text(family="serif")) 
 
-  	if(output=="plot")
-  	{
-  		graph
-  	}
-  	if(output=="dataframe")
-  	{
-  		MençõesJournal
-  	}
+     if(output=="dataframe")
+     {
+         MençõesJournal
+     }else{if(output=="plot"){
+         graph
+     }}
 }
 
 ##########################################################################
@@ -745,7 +783,7 @@ SearchCount<-function(df)
 #'
 #' @param smooth Whether to smooth curves. Default smooth = FALSE
 #'
-#' @param YearLessThan Upper bound for the years being ploted
+#' @param YearBounds Optional vector with inferior and superior Year bounds for the plot. Ex: c(1970,1990)
 #'
 #' @return A plot of counted documents per year for a JSTOR_df 
 #'
@@ -755,7 +793,7 @@ SearchCount<-function(df)
 ##############################################
 
 
-plot_search<- function (df.list, legend, smooth=FALSE, YearLessThan)
+plot_search<- function (df.list, legend, smooth=FALSE, YearBounds)
 {
  '%>%'<-purrr::'%>%' 
 
@@ -782,13 +820,16 @@ plot_search<- function (df.list, legend, smooth=FALSE, YearLessThan)
   }
 	
   melted <- reshape2::melt(comparison ,  id.vars = 'Year', variable.name = 'series')
-  if (missing(YearLessThan))
-  {
-	melted<-melted
-  }else{
-  	melted<-melted%>%
-		dplyr::filter(Year<YearLessThan)
-  }
+  
+  	if (missing(YearBounds))
+  	{
+       		melted <- melted
+  	}else{
+      		melted <- melted%>%
+         		dplyr::filter(Year>YearBounds[1])%>%
+         		dplyr::filter(Year<YearBounds[2])
+  	}
+
 
   p<-ggplot2::ggplot(melted, 
 	ggplot2::aes(Year, value, color=series))
@@ -799,7 +840,7 @@ plot_search<- function (df.list, legend, smooth=FALSE, YearLessThan)
 	p<- p+ ggplot2::geom_smooth(se=FALSE)
   }
 	p + ggplot2::theme_bw()+
-	ggplot2::labs(x= "", y= "Citations")+
+	ggplot2::labs(x= "", y= "Documents")+
   	ggplot2::theme(panel.grid.minor = ggplot2::element_blank(), panel.border = ggplot2::element_rect(linetype = "solid", color = "grey", fill = NA), 
 		legend.position="bottom", legend.direction="horizontal", legend.title = ggplot2::element_blank(),
 		#strip.text.x = element_text(size = 12, colour = "black"),
@@ -831,6 +872,8 @@ plot_search<- function (df.list, legend, smooth=FALSE, YearLessThan)
 #'
 #' @param comparisonType  Which type of caomparison to make. Acceptable entries: "Words", "Bigrams", "Trigrams" and "Journal".
 #'
+#' @param YearBounds Optional vector with inferior and superior Year bounds for the plot. Ex: c(1970,1990)
+#'
 #' @return A ggplot2 object 
 #'
 #' @examples compareJSTOR_dfs(dfx, dfk, 4, 4, c("legendx", "legendk", comparisonType = "Journal")
@@ -839,7 +882,7 @@ plot_search<- function (df.list, legend, smooth=FALSE, YearLessThan)
 #' @export
 
 ##############################################
-compareJSTOR_dfs <- function(df1, df2,y, x, legend, comparisonType)
+compareJSTOR_dfs <- function(df1, df2,y, x, legend, comparisonType, YearBounds)
 {
 
 	'%>%'<-purrr::'%>%'
@@ -895,6 +938,16 @@ compareJSTOR_dfs <- function(df1, df2,y, x, legend, comparisonType)
 
 	odd <- seq(1, ((nrow(toPlot))+nrow(toPlot)%%2), 2)
 	even <- seq(2, (nrow(toPlot)), 2)
+
+	if (missing(YearBounds))
+  	{
+       		toPlot <- toPlot
+  	}else{
+      		toPlot <- toPlot%>%
+         		dplyr::filter(Year>YearBounds[1])%>%
+         		dplyr::filter(Year<YearBounds[2])
+  	}
+
 
 	if(comparisonType == "Bigrams"){
 		plot <- ggplot2::ggplot(toPlot, 
