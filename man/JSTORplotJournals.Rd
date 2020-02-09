@@ -4,7 +4,7 @@
 \alias{JSTORplotJournals}
 \title{JSTORplotJournals}
 \usage{
-JSTORplotJournals(df, y, x, output = "plot")
+JSTORplotJournals(df, y, x, output = "plot", YearBounds)
 }
 \arguments{
 \item{y}{Determines the size of the ranking being observed for each year}
@@ -13,6 +13,8 @@ JSTORplotJournals(df, y, x, output = "plot")
 be included in the dataframe or plot}
 
 \item{output}{Whether to output a dataframe or a plot. Acceptable entries: "plot" and "dataframe".}
+
+\item{YearBounds}{Optional vector with inferior and superior Year bounds for the plot. Ex: c(1970,1990)}
 
 \item{dfEco}{A dataframe in the JSTOR_df format (see: JSTOR_df())}
 }

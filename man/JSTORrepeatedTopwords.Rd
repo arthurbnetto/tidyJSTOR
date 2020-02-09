@@ -4,7 +4,14 @@
 \alias{JSTORrepeatedTopwords}
 \title{JSTORrepeatedTopwords}
 \usage{
-JSTORrepeatedTopwords(dfEco, y, x, StopWords = TRUE, output = "plot")
+JSTORrepeatedTopwords(
+  dfEco,
+  y,
+  x,
+  StopWords = TRUE,
+  output = "plot",
+  YearBounds
+)
 }
 \arguments{
 \item{dfEco}{A dataframe in the JSTOR_df format (see: JSTOR_df())}
@@ -18,6 +25,8 @@ be included in the dataframe or plot}
 for custom, a dataframe of two columns (word, lexicon = "custom") must be provided.}
 
 \item{output}{Whether to output a dataframe or a plot. Acceptable entries: "plot" and "dataframe".}
+
+\item{YearBounds}{Optional vector with inferior and superior Year bounds for the plot. Ex: c(1970,1990)}
 }
 \value{
 A ggplot2 object or a dataframe

@@ -13,7 +13,7 @@ Transform(filePath)
 A single row dataframe containing informations about: Journal, Publisher, Title, Year, Abstract and Language
 }
 \description{
-This function transforms JSTOR DFR files into single row tidy dataframes
+This function transforms JSTOR DFR files into single row tidy datafrlabames
 }
 \examples{
 Transform("C:/Users/.../Documents/metadata/file1.xml")

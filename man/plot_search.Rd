@@ -4,7 +4,7 @@
 \alias{plot_search}
 \title{plot_search}
 \usage{
-plot_search(df.list, legend, smooth = FALSE, YearLessThan)
+plot_search(df.list, legend, smooth = FALSE, YearBounds)
 }
 \arguments{
 \item{df.list}{A list or a single dataframe in the JSTOR_df format (see: JSTOR_df())}
@@ -14,7 +14,7 @@ the number of df in df.list c("legend1", "legend2", ..., "legendN")}
 
 \item{smooth}{Whether to smooth curves. Default smooth = FALSE}
 
-\item{YearLessThan}{Upper bound for the years being ploted}
+\item{YearBounds}{Optional vector with inferior and superior Year bounds for the plot. Ex: c(1970,1990)}
 }
 \value{
 A plot of counted documents per year for a JSTOR_df

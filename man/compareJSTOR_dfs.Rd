@@ -4,7 +4,7 @@
 \alias{compareJSTOR_dfs}
 \title{compareJSTOR_dfs}
 \usage{
-compareJSTOR_dfs(df1, df2, y, x, legend, comparisonType)
+compareJSTOR_dfs(df1, df2, y, x, legend, comparisonType, YearBounds)
 }
 \arguments{
 \item{df1}{A dataframe in the JSTOR_df format (see: JSTOR_df())}
@@ -20,6 +20,8 @@ be included in the dataframe or plot}
 the number of dfs (2): c("legend1", "legend2")}
 
 \item{comparisonType}{Which type of caomparison to make. Acceptable entries: "Words", "Bigrams", "Trigrams" and "Journal".}
+
+\item{YearBounds}{Optional vector with inferior and superior Year bounds for the plot. Ex: c(1970,1990)}
 }
 \value{
 A ggplot2 object
