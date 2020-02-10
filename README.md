@@ -75,7 +75,32 @@ The output would be this:
 
 The first function counts the number of appearences of those words and normalizes according to the number of papers in each year. The dataframe looks as follows and the second function simply plots it.
 
-![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/imagesReadMe/theoryHead.jpeg)
+| Year| Normalized|
+|----:|----------:|
+| 1940|  0.2500000|
+| 1941|  1.6666667|
+| 1943|  1.5000000|
+| 1944|  1.0000000|
+| 1945|  0.5000000|
+| 1948|  0.6666667|
+| 1949|  0.7500000|
+| 1950|  0.2857143|
+| 1951|  0.2000000|
+| 1954|  0.4166667|
+| 1956|  1.0000000|
+| 1958|  0.0666667|
+| 1959|  0.1379310|
+| 1960|  0.1142857|
+| 1961|  0.1785714|
+| 1962|  0.3809524|
+| 1963|  0.5769231|
+| 1964|  0.1500000|
+| 1965|  0.1250000|
+| 1966|  0.3750000|
+| 1967|  0.1044776|
+| 1968|  0.0952381|
+| 1969|  0.1789474|
+| 1970|  0.1466667|
 
 Our results are interesting, but we could go further and compare theoretical words with empirical words. We can now create an array of words related to empirical research such as: c("empirical", "data", "empirically"). Following the same procedure for creating the dataframe, the code would be as follows:
 
