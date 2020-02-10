@@ -33,7 +33,7 @@ It seems that the cleaning process has not produced any problem other than disca
     View(head(dfClean))
 
 
-![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/imagesReadMe/dfHead.jpeg)
+![alt text](https://raw.githubusercontent.com/arthurbnetto/tidyJSTOR/master/imagesReadMe/dfHead.html)
 
 Now, with a clean dataset, it is possible to start some exploratory analysis. First, let's have a look into which were the words that were most used in our dataset. More specifically let's see which were the words that were in the top 5 most used words for at least 3 distinct years (not necessarily in sequence):
            
